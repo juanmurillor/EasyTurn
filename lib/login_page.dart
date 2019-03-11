@@ -30,27 +30,19 @@ class _LoginPageState extends State<LoginPage>{
   String _apellido;
   String _nombre;
   num _telefono;
-  List<DropdownMenuItem<int>> _tipodeusuario = [];
-
-  void loadData(){
-    _tipodeusuario = [];
-    _tipodeusuario.add(new DropdownMenuItem(
-      child: new Text('Cliente'),
-      value: 1,
-    ));
-      _tipodeusuario.add(new DropdownMenuItem(
-      child: new Text('Restaurante'),
-      value: 2,
-    ));
-      _tipodeusuario.add(new DropdownMenuItem(
-      child: new Text('Administrador'),
-      value: 3,
-    ));
-  }
+  String _tipodeusuarios = null;
+  List<String> _tipodeusuario = new List<String>();
  
+  void initState() {
+    _tipodeusuario.addAll(["Cliente","Restaurante","Administrativo"]);
+    _tipodeusuarios = _tipodeusuario.elementAt(0);
+  }
 
-
-
+  void _onChanged(String tipodeusuarios){
+    setState(() {
+          _tipodeusuarios = tipodeusuarios;
+        });
+  }
 
   
   FormType _formType = FormType.login;
@@ -80,7 +72,8 @@ class _LoginPageState extends State<LoginPage>{
           'apellido': '$_apellido',
           'telefono': '$_telefono',
           'email': '$_email',
-          'contraseña': '$_password'
+          'contraseña': '$_password',
+          'tipoUsuario': '$_tipodeusuarios'
           });
         setState(() => id = ref.documentID); 
         print(ref.documentID);          
@@ -156,7 +149,22 @@ class _LoginPageState extends State<LoginPage>{
       ];
       }else{
         return[
-           
+           new DropdownButton( 
+             value: _tipodeusuarios,
+             items: _tipodeusuario.map((String tipodeusuarios){
+              
+               return new DropdownMenuItem(
+                 value: tipodeusuarios,
+                 child: new Row(
+                   children: <Widget>[
+                     new Text('Tipo de Usuario: $tipodeusuarios')
+                   ],
+                 ),
+                 );
+
+             }).toList(),
+             onChanged: (String tipodeusuarios){_onChanged(tipodeusuarios);},
+             ), 
            new TextFormField(
                     decoration: new InputDecoration(labelText: 'Email'),
                     validator: (value) => value.isEmpty ? 'El Email no puede estar vacio' : null,  
