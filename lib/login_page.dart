@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage>{
   final db = Firestore.instance;
 
   final formKey = new GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
   String id;
   String _email;
@@ -69,6 +70,7 @@ class _LoginPageState extends State<LoginPage>{
       if(_formType == FormType.login){
         String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
         print('sesion iniciada por: $userId');
+        _scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text('Sesion iniciada, Bienvenido'),));
       }else{
         String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
         print('usuario registrado: $userId');
@@ -86,7 +88,13 @@ class _LoginPageState extends State<LoginPage>{
         widget.onSignedIn();
       }
       catch(e) {
-        print('Error: $e');
+        print(e.message);
+       _scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text(e.message,
+       style: new TextStyle(color: Colors.white ),
+       
+       ),
+       backgroundColor: Color(0xFFC91301),));
+
       }
     }
   }
@@ -109,6 +117,7 @@ class _LoginPageState extends State<LoginPage>{
   @override
     Widget build(BuildContext context) {
       return new Scaffold(
+        key: _scaffoldState,
         appBar: new AppBar(
           title: new Text('Easy Turn'),
           ),

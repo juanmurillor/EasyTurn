@@ -55,6 +55,7 @@ class _RootPageState extends State<RootPage> {
             auth: widget.auth,
             onSignedIn: _signedIn
           );
+
       case AuthStatus.signedIn:
       return new HomePage(
         auth: widget.auth,
