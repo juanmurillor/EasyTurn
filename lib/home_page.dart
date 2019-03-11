@@ -57,7 +57,10 @@ void _signOut() async {
               'apellido: ${doc.data['apellido']}',
               style: TextStyle(fontSize: 20),
             ),
-           
+           Text(
+              'id: ${doc.documentID}',
+              style: TextStyle(fontSize: 20),
+            ),
               ],
             )
           

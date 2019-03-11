@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth.dart';
+import 'buscar.dart';
 class LoginPage extends StatefulWidget{
 
   LoginPage({this.auth, this.onSignedIn});
@@ -32,6 +33,7 @@ class _LoginPageState extends State<LoginPage>{
   num _telefono;
   String _tipodeusuarios = null;
   List<String> _tipodeusuario = new List<String>();
+
  
   void initState() {
     _tipodeusuario.addAll(["Cliente","Restaurante","Administrativo"]);
@@ -62,7 +64,27 @@ class _LoginPageState extends State<LoginPage>{
       if(_formType == FormType.login){
         String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
         print('sesion iniciada por: $userId');
-        _scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text('Sesion iniciada, Bienvenido'),));
+        var resultado =[];
+        buscar().buscarusuario(_email).then((QuerySnapshot docs){
+          for (int i = 0; i < docs.documents.length; i++) {
+            resultado.add(docs.documents[i].data.values.toList());
+            //print(docs.documents[i].data);
+          }
+          print(resultado[0][1]);
+          if (resultado[0][1] == "Administrativo") {
+            print('Bienvenido Usuario Administrativo');
+          }
+          if (resultado[0][1] == "Restaurante"){
+            print('Bienvenido Usuario Restaurante');
+          }
+        });
+        //resultado.forEach((resultado)=>print(resultado));
+        //DocumentSnapshot snapshot = await db.collection('usuarios').getDocuments().get();
+        //print(snapshot.data);
+        /*if (_email == snapshot.data['email']) {
+          
+        }*/
+        //_scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text('Sesion iniciada, Bienvenido'),));
       }else{
         String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
         print('usuario registrado: $userId');
