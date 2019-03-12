@@ -12,7 +12,60 @@ class LoginPage extends StatefulWidget{
     State<StatefulWidget> createState() => new _LoginPageState();
 
 }
-
+class AdministradorRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bienvenido Administrativo"),
+      ),
+      body: Center(
+        /*child: RaisedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          //child: Text('Go back!'),
+        ),*/
+      ),
+    );
+  }
+}
+class ClienteRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bienvenido Cliente"),
+      ),
+      body: Center(
+        /*child: RaisedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          //child: Text('Go back!'),
+        ),*/
+      ),
+    );
+  }
+}
+class RestauranteRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bienvenido Restaurante"),
+      ),
+      body: Center(
+        /*child: RaisedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          //child: Text('Go back!'),
+        ),*/
+      ),
+    );
+  }
+}
 enum FormType {
   login,
   register
@@ -57,7 +110,7 @@ class _LoginPageState extends State<LoginPage>{
     } 
     return false;
   }
-
+  
   void validateAndSubmit() async{
     if(validateAndSave()){
       try{
@@ -73,9 +126,23 @@ class _LoginPageState extends State<LoginPage>{
           print(resultado[0][1]);
           if (resultado[0][1] == "Administrativo") {
             print('Bienvenido Usuario Administrativo');
+            Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => AdministradorRoute()),
+  );
           }
           if (resultado[0][1] == "Restaurante"){
-            print('Bienvenido Usuario Restaurante');
+            Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => RestauranteRoute()),
+  );
+          }
+          if (resultado[0][1] == "Cliente") {
+            print('Bienvenido Usuario Cliente');
+            Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ClienteRoute()),
+  );
           }
         });
         //resultado.forEach((resultado)=>print(resultado));
@@ -160,7 +227,7 @@ class _LoginPageState extends State<LoginPage>{
            new TextFormField(
                     decoration: new InputDecoration(labelText: 'Email'),
                     validator: (value) => value.isEmpty ? 'El Email no puede estar vacio' : null,  
-                    onSaved: (value) => _email = value,                 
+                    onSaved: (value) => _email = value.trim(),                 
                   ),
                   new TextFormField(
                     decoration: new InputDecoration(labelText: 'Contraseña'),

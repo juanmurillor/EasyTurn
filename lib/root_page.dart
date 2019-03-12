@@ -14,10 +14,10 @@ class RootPage extends StatefulWidget{
 
 enum AuthStatus {
   notSignedIn,
-  signedIn
+  //signedIn
 }
 
-class _RootPageState extends State<RootPage> {
+class _RootPageState extends State<RootPage>{
 
   AuthStatus authStatus = AuthStatus.notSignedIn;
 
@@ -32,13 +32,13 @@ class _RootPageState extends State<RootPage> {
       });
     }
 
-    void _signedIn(){
+    /*void _signedIn(){
       setState(() {
               authStatus = AuthStatus.signedIn;
               
             });
 
-    }
+    }*/
      void _signedOut(){
       setState(() {
               authStatus = AuthStatus.notSignedIn;
@@ -54,15 +54,15 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.notSignedIn:
           return new LoginPage(
             auth: widget.auth,
-            onSignedIn: _signedIn
+            //onSignedIn: _signedIn
           );
 
-      case AuthStatus.signedIn:
+      /*case AuthStatus.signedIn:
       return new HomePage(
         auth: widget.auth,
         onSignedOut: _signedOut,
 
-      );
+      );*/
 
     }
 
