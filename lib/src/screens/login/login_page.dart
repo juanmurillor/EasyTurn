@@ -5,11 +5,13 @@ import 'buscar.dart';
 import '../modulo_administrativa/administrativo_page.dart';
 import '../modulo_cliente/cliente_page.dart';
 import '../modulo_restaurante/restaurante_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.onSignedIn});
   final BaseAuth auth;
   final VoidCallback onSignedIn;
+ 
 
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
@@ -19,10 +21,12 @@ enum FormType { login, register }
 
 class _LoginPageState extends State<LoginPage> {
   final db = Firestore.instance;
+ 
 
   final formKey = new GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
+
 
   String id;
   String _email;
@@ -32,6 +36,10 @@ class _LoginPageState extends State<LoginPage> {
   num _telefono;
   String _tipodeusuarios = null;
   List<String> _tipodeusuario = new List<String>();
+  
+  
+  
+  
 
   void initState() {
     _tipodeusuario.addAll(["Cliente", "Restaurante", "Administrativo"]);
@@ -48,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool validateAndSave() {
     final form = formKey.currentState;
+      
     if (form.validate()) {
       form.save();
       return true;
@@ -56,11 +65,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void validateAndSubmit() async {
+    FirebaseUser user =await FirebaseAuth.instance.currentUser();
     if (validateAndSave()) {
+     
       try {
         if (_formType == FormType.login) {
           String userId =
               await widget.auth.signInWithEmailAndPassword(_email, _password);
+              if(user.isEmailVerified){       
           print('sesion iniciada por: $userId');
           var resultado = [];
           Buscar().buscarusuario(_email).then((QuerySnapshot docs) {
@@ -89,7 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                 MaterialPageRoute(builder: (context) => ClienteRoute()),
               );
             }
-          });
+          });}else 
+          _scaffoldState.currentState.showSnackBar(new SnackBar(
+            content: new Text(
+              'Verifica tu cuenta para poder iniciar sesion',
+              style: new TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color(0xFF64FF7F),
+          ));
           //resultado.forEach((resultado)=>print(resultado));
           //DocumentSnapshot snapshot = await db.collection('usuarios').getDocuments().get();
           //print(snapshot.data);
@@ -97,7 +116,8 @@ class _LoginPageState extends State<LoginPage> {
           
         }*/
           //_scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text('Sesion iniciada, Bienvenido'),));
-        } else {
+        }else {
+          
           String userId = await widget.auth
               .createUserWithEmailAndPassword(_email, _password);
           print('usuario registrado: $userId');
@@ -114,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
           print(ref.documentID);
           _scaffoldState.currentState.showSnackBar(new SnackBar(
             content: new Text(
-              'Tu cuenta se ha creado con exito',
+              'Tu cuenta se ha creado con exito, revisa tu email para verificarla',
               style: new TextStyle(color: Colors.black),
             ),
             backgroundColor: Color(0xFF64FF7F),
@@ -130,7 +150,8 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Color(0xFFC91301),
         ));
       }
-    }
+      }
+    
   }
 
   void moveToRegister() {
