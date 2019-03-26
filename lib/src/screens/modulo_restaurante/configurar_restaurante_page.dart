@@ -22,18 +22,24 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
      TextEditingController urlFotoRestaurante = new TextEditingController();
 
 
-     Future<List> guardarRestaurante() async {
-       var response = await http.post("http://10.0.2.2:8080/easyturn/rest/controllers/restaurantes/saveRestaurantes", body: 
+     Future<http.Response> guardarRestaurante() async {
+       var url =  "http://localhost:8080/easyturn/rest/controllers/restaurantes/saveRestaurantes"; 
+       Map data = 
        {
-         "nombreRestaurante": nombreRestaurante.text,
-	       "idRestaurante": idRestaurante.text,
-	       "descripcionRestaurante": descripcionRestaurante.text,
-	       "emailUsuario": emailUsuario.text,
-	       "urlFotoRestaurante": urlFotoRestaurante.text,
-          "telefonoRestaurante": telefonoRestaurante.text	 
-       });
-          var datauser = json.decode(response.body);
-          return datauser;
+         'nombreRestaurante': nombreRestaurante.text,
+	       'idRestaurante': idRestaurante.text,
+	       'descripcionRestaurante': descripcionRestaurante.text,
+	       'emailUsuario': emailUsuario.text,
+	       'urlFotoRestaurante': urlFotoRestaurante.text,
+          'telefonoRestaurante': telefonoRestaurante.text	 
+       };
+          var Body = json.encode(data);
+          
+          var response = await http.post(url,body: Body);
+          print("${response.body}");
+          print("${response.statusCode}");
+          return response;
+
      }
 
 

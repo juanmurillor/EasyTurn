@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth.dart';
 import 'buscar.dart';
-import '../modulo_administrativa/administrativo_page.dart';
-import '../modulo_cliente/cliente_page.dart';
-import '../modulo_restaurante/restaurante_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.onSignedIn});
+  LoginPage({this.auth, this.onSignedInAsAdministrativo, this.onSignedInAsRestaurante, this.onSignedInAsCliente});
   final BaseAuth auth;
-  final VoidCallback onSignedIn;
+  final VoidCallback onSignedInAsAdministrativo;
+  final VoidCallback onSignedInAsRestaurante;
+  final VoidCallback onSignedInAsCliente;
+
+
  
 
   @override
@@ -83,23 +84,15 @@ class _LoginPageState extends State<LoginPage> {
             print(resultado[0][1]);
             if (resultado[0][1] == "Administrativo") {
               print('Bienvenido Usuario Administrativo');
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AdministradorRoute()),
-              );
+              widget.onSignedInAsAdministrativo();
             }
             if (resultado[0][1] == "Restaurante") {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RestauranteRoute()),
-              );
+              print('Bienvenido Usuario Restaurante');
+              widget.onSignedInAsRestaurante();
             }
             if (resultado[0][1] == "Cliente") {
               print('Bienvenido Usuario Cliente');
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ClienteRoute()),
-              );
+              widget.onSignedInAsCliente();             
             }
           });}else 
           _scaffoldState.currentState.showSnackBar(new SnackBar(

@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 import 'configurar_restaurante_page.dart';
+import '../login/auth.dart';
 
-class RestauranteRoute extends StatefulWidget {
+class RestaurantePage extends StatefulWidget {
+  RestaurantePage({this.auth, this.onSignedOut});
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+
 
 @override
-  State<StatefulWidget> createState() => new _RestauranteRouteState();
+  State<StatefulWidget> createState() => new _RestaurantePageState();
 
 }
 
-class _RestauranteRouteState extends State<RestauranteRoute>{
+class _RestaurantePageState extends State<RestaurantePage>{
+
+  void _signOut() async {
+
+  try{
+    await widget.auth.signOut();
+    widget.onSignedOut();
+
+  }catch (e){
+    print (e);
+
+  }
+}
 
 
   void moveToConfigurarRestaurantePage(){
@@ -25,6 +42,12 @@ class _RestauranteRouteState extends State<RestauranteRoute>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Bienvenido Restaurante"),
+        actions: <Widget>[
+            new FlatButton(
+              child: new Text('Cerrar Sesion', style: new TextStyle(fontSize: 17.0, color: Colors.white),),
+              onPressed: _signOut
+            )
+          ],
       ),
       body: Container(
         child: Center(
@@ -39,12 +62,7 @@ class _RestauranteRouteState extends State<RestauranteRoute>{
                   onPressed: moveToConfigurarRestaurantePage,
             
           )
-          /*child: RaisedButton(
-            onPressed: () {
-              // Navigate back to first route when tapped.
-            },
-            //child: Text('Go back!'),
-          ),*/
+          
         ),
       ),
     );
