@@ -23,8 +23,8 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
 
 
      Future<http.Response> guardarRestaurante() async {
-       var url =  "http://localhost:8080/easyturn/rest/controllers/restaurantes/saveRestaurantes"; 
-       Map data = 
+       var url =  "http://172.16.117.76:8080/easyturn/rest/controllers/restaurantes/saveRestaurantes"; 
+       Map<String, dynamic> data = 
        {
          'nombreRestaurante': nombreRestaurante.text,
 	       'idRestaurante': idRestaurante.text,
@@ -33,13 +33,15 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
 	       'urlFotoRestaurante': urlFotoRestaurante.text,
           'telefonoRestaurante': telefonoRestaurante.text	 
        };
-          var Body = json.encode(data);
-          
-          var response = await http.post(url,body: Body);
+       var Body = json.encode(data);
+       var response = await http.post(Uri.parse(url),body: Body,headers:{
+          "Accept": "application/json",
+          "content-type": "application/json"
+        } , encoding: Encoding.getByName("utf-8"));
           print("${response.body}");
           print("${response.statusCode}");
+          print(Body);
           return response;
-
      }
 
 
