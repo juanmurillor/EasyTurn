@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth.dart';
 import 'buscar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.onSignedInAsAdministrativo, this.onSignedInAsRestaurante, this.onSignedInAsCliente});
@@ -114,6 +116,42 @@ class _LoginPageState extends State<LoginPage> {
           String userId = await widget.auth
               .createUserWithEmailAndPassword(_email, _password);
           print('usuario registrado: $userId');
+
+          //rest spring
+          Future<http.Response> guardarUsuario() async {
+       var url =  "http://192.168.1.69:8080/easyturn/rest/controllers/usuarios/saveUsuarios"; 
+       var tipousuarioid;
+       if (_tipodeusuarios == "Restaurante" ){
+         tipousuarioid=2;
+      }
+      if (_tipodeusuarios == "Administrativo" ){
+         tipousuarioid=3;
+      }
+      if (_tipodeusuarios == "Cliente" ){
+         tipousuarioid=1;
+      }
+       Map<String, dynamic> data = 
+       {
+       'apellido': _apellido,
+		   'contraseña': _password,	
+		   'email':	_email,
+		   'nombre': _nombre,
+		   'telefono': _telefono,
+		   'idtipousuario_Tipousuario': tipousuarioid
+       };
+       var Body = json.encode(data);
+       var response = await http.post(Uri.parse(url),body: Body,headers:{
+          "Accept": "application/json",
+          "content-type": "application/json"
+        } , encoding: Encoding.getByName("utf-8"));
+          print("${response.body}");
+          print("${response.statusCode}");
+          print(Body);
+          return response;
+     }
+
+
+      guardarUsuario();
 
           DocumentReference ref = await db.collection('usuarios').add({
             'nombre': '$_nombre',

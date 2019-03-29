@@ -20,7 +20,28 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
      TextEditingController nombreRestaurante = new TextEditingController();
      TextEditingController telefonoRestaurante = new TextEditingController();
      TextEditingController urlFotoRestaurante = new TextEditingController();
-
+    Future<http.Response> guardarUsuario() async {
+       var url =  "http://192.168.1.69:8080/easyturn/rest/controllers/usuarios/saveUsuarios"; 
+      
+       Map<String, dynamic> data = 
+       {
+       'apellido': descripcionRestaurante.text,
+		   'contraseña': urlFotoRestaurante.text,	
+		   'email':	emailUsuario.text,
+		   'nombre': nombreRestaurante.text,
+		   'telefono': idRestaurante.text,
+		   'idtipousuario_Tipousuario': telefonoRestaurante.text
+       };
+       var Body = json.encode(data);
+       var response = await http.post(Uri.parse(url),body: Body,headers:{
+          "Accept": "application/json",
+          "content-type": "application/json"
+        } , encoding: Encoding.getByName("utf-8"));
+          print("${response.body}");
+          print("${response.statusCode}");
+          print(Body);
+          return response;
+     }
 
      Future<http.Response> guardarRestaurante() async {
        var url =  "http://172.16.117.76:8080/easyturn/rest/controllers/restaurantes/saveRestaurantes"; 
@@ -118,7 +139,7 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
           ),
           color: Colors.blue,
           onPressed: (){
-            guardarRestaurante();
+            guardarUsuario();
 
           }),
         
