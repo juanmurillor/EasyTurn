@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'configurar_restaurante_page.dart';
 import '../login/auth.dart';
+import 'lista_productos.dart';
 
 class RestaurantePage extends StatefulWidget {
   RestaurantePage({this.auth, this.onSignedOut});
@@ -34,6 +35,12 @@ class _RestaurantePageState extends State<RestaurantePage>{
                 MaterialPageRoute(builder: (context) => ConfigurarRestaurantePage()),
               );
   }
+  void moveToListaProductosPage(){
+    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ListaProductosPage()),
+              );
+  }
 
 
 
@@ -49,10 +56,10 @@ class _RestaurantePageState extends State<RestaurantePage>{
             )
           ],
       ),
-      body: Container(
-        child: Center(
-          child: new RaisedButton(
-            child: new Text('Configurar Restaurante',
+      body: new ListView(
+        children: <Widget>[
+          new RaisedButton(
+            child: new Text('Lista de Restaurantes',
              style: new TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
@@ -60,11 +67,21 @@ class _RestaurantePageState extends State<RestaurantePage>{
                   ),
                   color: Colors.blue,
                   onPressed: moveToConfigurarRestaurantePage,
-            
+          ),
+          new RaisedButton(
+            child: new Text('Lista de Productos',
+             style: new TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400),
+                  ),
+                  color: Colors.blue,
+                  onPressed: moveToListaProductosPage,
+
           )
-          
+        ],
+        
         ),
-      ),
-    );
+      );
   }
 }

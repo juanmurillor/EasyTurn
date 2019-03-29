@@ -2,21 +2,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class ConfigurarRestaurantePage extends StatefulWidget{
+class ListaProductosPage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState() => new _ConfigurarRestaurantePage();
+    State<StatefulWidget> createState() => new _ListaProductosPage();
 
 
    
 
 }
-class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
+class _ListaProductosPage extends State<ListaProductosPage>{
  List data;
-
 Future<String>getData() async{
   http.Response response =await http.get(
-  Uri.encodeFull("http://192.168.1.69:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
+  Uri.encodeFull("http://192.168.1.69:8080/easyturn/rest/controllers/productrestaurantes/getDataProductrestaurantes"),
    headers: {"Accept": "application/json"}
   );
 
@@ -50,7 +49,7 @@ this.setState((){
     Widget build(BuildContext context) {
      return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Lista de Restaurantes'),
+          title: new Text('Lista de Productos'),
         ),
         body: new ListView.builder(
           itemCount: data == null ? 0 : data.length,
@@ -62,7 +61,7 @@ this.setState((){
                   children: <Widget>[
                     new Card(
                       child: new Container(
-                        child: Text(data[index]["nombrerestaurante"]),
+                        child: Text("nombre del producto: ${data[index]["nombreproducto"]} | Precio: ${data[index]["precioproducto"]} COP "),
                 
                         padding: const EdgeInsets.all(20.0),
                       )
