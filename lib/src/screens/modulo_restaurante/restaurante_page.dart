@@ -1,3 +1,4 @@
+import 'package:easy_turn/src/screens/modulo_restaurante/cargar_imagen.dart';
 import 'package:flutter/material.dart';
 import 'configurar_restaurante_page.dart';
 import '../login/auth.dart';
@@ -41,6 +42,12 @@ class _RestaurantePageState extends State<RestaurantePage>{
                 MaterialPageRoute(builder: (context) => ListaProductosPage()),
               );
   }
+  void moveToCargarImagenPage(){
+    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CargarImagenPage()),
+              );
+  }
 
 
 
@@ -77,6 +84,17 @@ class _RestaurantePageState extends State<RestaurantePage>{
                   ),
                   color: Colors.blue,
                   onPressed: moveToListaProductosPage,
+
+          ),
+          new RaisedButton(
+            child: new Text('Subir imagen',
+             style: new TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400),
+                  ),
+                  color: Colors.blue,
+                  onPressed: moveToCargarImagenPage,
 
           )
         ],

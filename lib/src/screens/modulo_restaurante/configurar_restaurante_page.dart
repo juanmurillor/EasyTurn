@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class ConfigurarRestaurantePage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState() => new _ConfigurarRestaurantePage();
+    State<StatefulWidget> createState () => new _ConfigurarRestaurantePage();
 
 
    
