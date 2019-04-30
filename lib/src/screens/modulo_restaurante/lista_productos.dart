@@ -15,7 +15,7 @@ class _ListaProductosPage extends State<ListaProductosPage>{
  List data;
 Future<String>getData() async{
   http.Response response =await http.get(
-  Uri.encodeFull("http://192.168.1.69:8080/easyturn/rest/controllers/productrestaurantes/getDataProductrestaurantes"),
+  Uri.encodeFull("http://172.16.118.153:8080/easyturn/rest/controllers/productrestaurantes/getDataProductrestaurantes"),
    headers: {"Accept": "application/json"}
   );
 

@@ -16,7 +16,7 @@ class _ConfigurarRestaurantePage extends State<ConfigurarRestaurantePage>{
 
 Future<String>getData() async{
   http.Response response =await http.get(
-  Uri.encodeFull("http://192.168.1.69:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
+  Uri.encodeFull("http://172.16.109.249:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
    headers: {"Accept": "application/json"}
   );
 
@@ -50,7 +50,7 @@ this.setState((){
     Widget build(BuildContext context) {
      return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Lista de Restaurantes'),
+          title: new Text('Restaurantes'),
         ),
         body: new ListView.builder(
           itemCount: data == null ? 0 : data.length,
