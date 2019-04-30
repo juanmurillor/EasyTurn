@@ -1,7 +1,8 @@
+import 'package:easy_turn/src/screens/login/auth.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
 import 'package:easy_turn/src/screens/modulo_restaurante/configurar_restaurante_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../login/auth.dart';
 
 
 class ClientePage extends StatefulWidget {
@@ -20,6 +21,12 @@ class _ClientePageState extends State<ClientePage>{
     Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ConfigurarRestaurantePage()),
+              );
+  }
+  void moveToMenuSeccAdministrativaPage(){
+    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MenuSeccAdministrativaPage()),
               );
   }
   
@@ -92,6 +99,7 @@ void _signOut() async {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(16.0),
+            child: FlatButton(
             child: Container(
               child: FittedBox(
               child: Material(
@@ -122,10 +130,9 @@ void _signOut() async {
                       child: ClipRRect(
                         borderRadius: new BorderRadius.circular(24.0),
                         child: Image(
-                           
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_960_720.jpg"),
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/08/23/23/11/egg-1615790_960_720.jpg"),
                         ),
                       ),
                     )
@@ -134,9 +141,12 @@ void _signOut() async {
               ),
             ),
             ),
+            onPressed: moveToConfigurarRestaurantePage,
+            ),
           ), 
           Padding(
              padding: const EdgeInsets.all(16.0),
+            child: new FlatButton( 
             child: Container(
               child: FittedBox(
               child: Material(
@@ -151,13 +161,13 @@ void _signOut() async {
                       child: new FlatButton(
                        child: new Text(
                         "Seccion Administrativa",
-                      style: new TextStyle(fontSize: 33.0, 
+                      style: new TextStyle(fontSize: 34.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontStyle: FontStyle.italic
                       ),
                       ),
-                      
+                      onPressed: moveToMenuSeccAdministrativaPage,
                       ),
                     ),
                     Container(
@@ -170,6 +180,7 @@ void _signOut() async {
                           alignment: Alignment.topRight,
                           image: NetworkImage("https://cdn.pixabay.com/photo/2018/02/14/10/28/business-3152586_960_720.jpg"),
                         ),
+                      
                       ),
                     )
                   ],
@@ -177,7 +188,9 @@ void _signOut() async {
               ),
             ),
             ),
-            )
+            onPressed: moveToMenuSeccAdministrativaPage,
+            ),
+          ),
           ],
       
           
