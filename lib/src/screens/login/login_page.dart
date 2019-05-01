@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
 
           //rest spring
           Future<http.Response> guardarUsuario() async {
-       var url =  "http://192.168.1.69:8080/easyturn/rest/controllers/usuarios/saveUsuarios"; 
+       var url =  "http://192.168.0.18:8080/easyturn/rest/controllers/usuarios/saveUsuarios"; 
        var tipousuarioid;
        if (_tipodeusuarios == "Restaurante" ){
          tipousuarioid=2;

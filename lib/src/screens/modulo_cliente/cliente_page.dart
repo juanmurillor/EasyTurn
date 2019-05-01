@@ -1,7 +1,6 @@
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
-import 'package:easy_turn/src/screens/modulo_restaurante/configurar_restaurante_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/menu_restaurantes.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,10 +16,10 @@ class ClientePage extends StatefulWidget {
 class _ClientePageState extends State<ClientePage>{
   
   
- void moveToConfigurarRestaurantePage(){
+ void moveToMenuRestaurantesPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ConfigurarRestaurantePage()),
+                MaterialPageRoute(builder: (context) => MenuRestaurantesPage()),
               );
   }
   void moveToMenuSeccAdministrativaPage(){
@@ -121,7 +120,7 @@ void _signOut() async {
                       fontStyle: FontStyle.italic
                       ),
                       ),
-                      onPressed: moveToConfigurarRestaurantePage,
+                      onPressed: moveToMenuRestaurantesPage,
                       )
                     ),
                     Container(
@@ -141,7 +140,7 @@ void _signOut() async {
               ),
             ),
             ),
-            onPressed: moveToConfigurarRestaurantePage,
+            onPressed: moveToMenuRestaurantesPage,
             ),
           ), 
           Padding(
