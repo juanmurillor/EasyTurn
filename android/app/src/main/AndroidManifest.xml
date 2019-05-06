@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="easy_turn"
+        android:label="EasyTurn"
         android:icon="@mipmap/easy_turn_launcher">
         <activity
             android:name=".MainActivity"
