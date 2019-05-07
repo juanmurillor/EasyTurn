@@ -14,7 +14,7 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
-            "http://172.16.117.202:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
+            "http://192.168.0.18:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
         headers: {"Accept": "application/json"});
 
     this.setState(() {
