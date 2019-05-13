@@ -17,7 +17,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
-            "http://172.16.101.12:8080/easyturn/rest/controllers/productrestaurantes/getProductByRestaurant/${widget.data["idrestaurante"]}"),
+            "http://192.168.0.18:8080/easyturn/rest/controllers/productrestaurantes/getProductByRestaurant/${widget.data["idrestaurante"]}"),
         headers: {"Accept": "application/json"});
 
     this.setState(() {
