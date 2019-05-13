@@ -2,20 +2,44 @@ import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/menu_restaurantes.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class ClientePage extends StatefulWidget {
   ClientePage({this.auth, this.onSignedOut});
   final BaseAuth auth;
-  final VoidCallback onSignedOut;
+  final VoidCallback onSignedOut; 
 
 
   @override
     State<StatefulWidget> createState() => new _ClientePageState();
     }
 class _ClientePageState extends State<ClientePage>{
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   
-  
+  @override
+  void initState(){
+    super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('Hola');
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('Hola2');
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('Hola3');
+        print('on launch $message');
+      },
+    );
+    _firebaseMessaging.getToken().then((token){
+      print('Este es el token');
+      print(token);
+    });
+  }
+
  void moveToMenuRestaurantesPage(){
     Navigator.push(
                 context,

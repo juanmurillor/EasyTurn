@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class MenuAreaCajasPage extends StatefulWidget {
@@ -24,14 +25,23 @@ class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
 
 
 void crearTurno() async{
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  String Token;
       FirebaseUser user =await FirebaseAuth.instance.currentUser();
+
+      _firebaseMessaging.getToken().then((token){
+      print('Este es el token en menu_area_cajas');
+      Token = token;
+      print(token);
+    });
+
       print("signed in" + user.email);
       
       var resultado = [];
       Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
         String Nombre;
         String Apellido;
-
+        
         for (int i = 0; i < docs.documents.length; i++) {
               resultado.add(docs.documents[i].data.values.toList());
               print(docs.documents[i].data);
@@ -50,6 +60,11 @@ void crearTurno() async{
           });
           setState(() => id = ref.documentID);
           print(ref.documentID);
+        DocumentReference ref2 = await db.collection('TurnosCaja_Tokens').add({
+            'token': '$Token'
+          });
+          setState(() => id = ref2.documentID);
+          print(ref2.documentID);
 
       });
 
