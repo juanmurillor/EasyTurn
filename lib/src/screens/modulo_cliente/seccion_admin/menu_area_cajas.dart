@@ -1,16 +1,71 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_turn/src/screens/login/auth.dart';
+import 'package:easy_turn/src/screens/login/buscar.dart';
 
-class MenuAreaCajasPage extends StatefulWidget{
 
+class MenuAreaCajasPage extends StatefulWidget {
+  MenuAreaCajasPage({this.auth, this.onSignedOut});
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
   @override
-    State<StatefulWidget> createState () => new _MenuAreaCajasPage();
+  State<StatefulWidget> createState() => new _MenuAreaCajasPage();
+}
+
+class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
 
 
-   
+  
+  final db = Firestore.instance;
+
+    String id;
+
+
+
+void crearTurno() async{
+      FirebaseUser user =await FirebaseAuth.instance.currentUser();
+      print("signed in" + user.email);
+      
+      var resultado = [];
+      Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
+        String Nombre;
+        String Apellido;
+
+        for (int i = 0; i < docs.documents.length; i++) {
+              resultado.add(docs.documents[i].data.values.toList());
+              print(docs.documents[i].data);
+            }
+            print("este es el nombre "+resultado[0][3]);
+            Nombre = resultado[0][3];
+            Apellido = resultado[0][0];
+            
+
+        DocumentReference ref = await db.collection('TurnosCaja').add({
+            'Nombre': '$Nombre',
+            'Apellido': '$Apellido',
+            'Turno': 2
+            
+           
+          });
+          setState(() => id = ref.documentID);
+          print(ref.documentID);
+
+      });
+
+
+
+
+
+  /*DocumentReference ref = await db.collection('TurnoCaja').add({
+            'Nombre': '$_nombre',
+            'apellido': '$_apellido',
+           
+          });
+          setState(() => id = ref.documentID);
+          print(ref.documentID);*/
 
 }
-class _MenuAreaCajasPage extends State<MenuAreaCajasPage>{
 
 
   @override
@@ -19,30 +74,65 @@ class _MenuAreaCajasPage extends State<MenuAreaCajasPage>{
       appBar: AppBar(
         title: Text("Area de Cajas"),
       ),
-      body: 
-      new TurnosCajaList(),
-      
-        
-      );
-    
-  } 
+      body: TurnosCajaList(),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.add_circle),
+        label: Text("Pedir Turno"),
+        onPressed: crearTurno,
+        isExtended: true,
+      ),
+    );
+  }
 }
+
 class TurnosCajaList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('TurnosCaja').orderBy("Turno",).snapshots(),
+      stream: Firestore.instance
+          .collection('TurnosCaja')
+          .orderBy(
+            "Turno",
+          )
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError)
-          return new Text('Error: ${snapshot.error}');
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
-          case ConnectionState.waiting: return new Text('Loading...');
+          case ConnectionState.waiting:
+            return new Text('Loading...');
           default:
             return new ListView(
-              children: snapshot.data.documents.map((DocumentSnapshot document) {
-                return new ListTile(
-                  title: new Text('Turno: ${document['Turno']}'),
-                  subtitle: new Text('Nombre: ${document['Nombre']}'),
+              children:
+                  snapshot.data.documents.map((DocumentSnapshot document) {
+                return new Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text('Turno: ${document['Turno']}',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.right),
+                            new Text('Apellido: ${document['Apellido']}',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.right),
+                            new Text('Nombre: ${document['Nombre']}',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.right),    
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 );
               }).toList(),
             );

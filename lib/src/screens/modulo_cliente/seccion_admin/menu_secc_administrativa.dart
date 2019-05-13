@@ -45,7 +45,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Area Academica",
+                        "Turnos Area Academica",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -88,7 +88,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Area Financiera",
+                        "Turnos Area Financiera",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -132,7 +132,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Area de Cajas",
+                        "Turnos Area de Cajas",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
