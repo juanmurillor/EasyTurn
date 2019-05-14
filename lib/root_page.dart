@@ -16,6 +16,8 @@ class RootPage extends StatefulWidget{
 
 enum AuthStatus {
   notSignedIn,
+  signedInAsRestaurante,
+  signedInAsAdministrativo,
   signedInAsCliente
 
 }
@@ -29,7 +31,9 @@ class _RootPageState extends State<RootPage>{
       super.initState();
       widget.auth.currentUser().then((userId){
         setState(() {
+                  authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedInAsAdministrativo;
                   authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedInAsCliente;
+                  authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedInAsRestaurante;
 
 
                 });
@@ -37,7 +41,20 @@ class _RootPageState extends State<RootPage>{
       });
     }
 
-   
+    void _signedInAsRestaurante(){
+      setState(() {
+              authStatus = AuthStatus.signedInAsRestaurante;
+              
+            });
+
+    }
+     void _signedInAsAdministrativo(){
+      setState(() {
+              authStatus = AuthStatus.signedInAsAdministrativo;
+              
+            });
+
+    }
      void _signedInAsCliente(){
       setState(() {
               authStatus = AuthStatus.signedInAsCliente;
@@ -64,11 +81,23 @@ class _RootPageState extends State<RootPage>{
       case AuthStatus.notSignedIn:
           return new LoginPage(
             auth: widget.auth,
+            onSignedInAsAdministrativo: _signedInAsAdministrativo, 
+            onSignedInAsRestaurante: _signedInAsRestaurante,
             onSignedInAsCliente: _signedInAsCliente,
 
           );
 
-     
+      case AuthStatus.signedInAsAdministrativo:
+      return new AdministradorPage(
+        auth: widget.auth,
+        onSignedOut: _signedOut,
+      );
+
+      case AuthStatus.signedInAsRestaurante:
+      return new RestaurantePage(
+        auth: widget.auth,
+        onSignedOut: _signedOut,
+      );
 
       case AuthStatus.signedInAsCliente:
       return new ClientePage(

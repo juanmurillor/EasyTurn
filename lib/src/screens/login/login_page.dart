@@ -75,10 +75,28 @@ class _LoginPageState extends State<LoginPage> {
         if (_formType == FormType.login) {
           String userId =
               await widget.auth.signInWithEmailAndPassword(_email, _password);
-              print('sesion iniciada por: $userId');
               if(user.isEmailVerified){       
-                widget.onSignedInAsCliente();
-         }else 
+          print('sesion iniciada por: $userId');
+          var resultado = [];
+          Buscar().buscarusuario(_email).then((QuerySnapshot docs) {
+            for (int i = 0; i < docs.documents.length; i++) {
+              resultado.add(docs.documents[i].data.values.toList());
+              //print(docs.documents[i].data);
+            }
+            print(resultado[0][1]);
+            if (resultado[0][1] == "Administrativo") {
+              print('Bienvenido Usuario Administrativo');
+              widget.onSignedInAsAdministrativo();
+            }
+            if (resultado[0][1] == "Restaurante") {
+              print('Bienvenido Usuario Restaurante');
+              widget.onSignedInAsRestaurante();
+            }
+            if (resultado[0][1] == "Cliente") {
+              print('Bienvenido Usuario Cliente');
+              widget.onSignedInAsCliente();             
+            }
+          });}else 
           _scaffoldState.currentState.showSnackBar(new SnackBar(
             content: new Text(
               'Verifica tu cuenta para poder iniciar sesion',

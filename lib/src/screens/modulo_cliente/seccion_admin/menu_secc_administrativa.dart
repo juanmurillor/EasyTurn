@@ -1,6 +1,4 @@
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_academic.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_financiera.dart';
 import 'package:flutter/material.dart';
 
 class MenuSeccAdministrativaPage extends StatefulWidget{
@@ -20,18 +18,6 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                 MaterialPageRoute(builder: (context) => MenuAreaCajasPage()),
               );
   }
-  void moveToMenuAreaAcademicaPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuAreaAcademicaPage()),
-              );
-  }
-  void moveToMenuAreaFinancieraPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuAreaFinancieraPage()),
-              );
-  }
 
 
   @override
@@ -45,7 +31,6 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FlatButton(
             child: Container(
               child: FittedBox(
               child: Material(
@@ -87,12 +72,9 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuAreaAcademicaPage,
-            ),
           ), 
           Padding(
              padding: const EdgeInsets.all(16.0),
-             child: FlatButton(
             child: Container(
               child: FittedBox(
               child: Material(
@@ -133,8 +115,6 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuAreaFinancieraPage,
-             ),
             ),
              Padding(
              padding: const EdgeInsets.all(16.0),
