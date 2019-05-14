@@ -8,15 +8,15 @@ import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 
-class MenuAreaCajasPage extends StatefulWidget {
-  MenuAreaCajasPage({this.auth, this.onSignedOut});
+class MenuAreaFinancieraPage extends StatefulWidget {
+ MenuAreaFinancieraPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   @override
-  State<StatefulWidget> createState() => new _MenuAreaCajasPage();
+  State<StatefulWidget> createState() => new _MenuAreaFinancieraPage();
 }
 
-class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
+class _MenuAreaFinancieraPage extends State<MenuAreaFinancieraPage> {
 
 
   
@@ -32,7 +32,7 @@ void crearTurno() async{
       FirebaseUser user =await FirebaseAuth.instance.currentUser();
 
       _firebaseMessaging.getToken().then((token){
-      print('Este es el token en menu_area_cajas');
+      print('Este es el token en menu_area_financiera');
       Token = token;
       print(token);
     });
@@ -43,9 +43,9 @@ void crearTurno() async{
       Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
         String Nombre;
         String Apellido;
-          String email;
+         String email;
         email=user.email;
-
+        
         for (int i = 0; i < docs.documents.length; i++) {
               resultado.add(docs.documents[i].data.values.toList());
               print(docs.documents[i].data);
@@ -54,12 +54,12 @@ void crearTurno() async{
             Nombre = resultado[0][3];
             Apellido = resultado[0][0];
             
-          var batch = db.batch();
+            var batch = db.batch();
         var increment = FieldValue.increment(1);
         var rng = new Random();
         var lol = new List.generate(12, (_) => rng.nextInt(100));
 
-        var refe = db.collection('TurnosCaja').document('$lol');
+        var refe = db.collection('TurnosFinanciero').document('$lol');
         print(lol);
 
         batch.setData(refe, {
@@ -71,7 +71,8 @@ void crearTurno() async{
 
         }, merge: true);
         batch.commit();
-       /* DocumentReference ref = await db.collection('TurnosCaja').add({
+
+       /* DocumentReference ref = await db.collection('TurnosFinanciero').add({
             'Nombre': '$Nombre',
             'Apellido': '$Apellido',
             'Turno': 2
@@ -80,9 +81,10 @@ void crearTurno() async{
           });
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
-        DocumentReference ref2 = await db.collection('TurnosCaja_Tokens').add({
+        DocumentReference ref2 = await db.collection('TurnosFinanciero_Tokens').add({
             'token': '$Token',
             'email':  '$email'
+
           });
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
@@ -108,7 +110,7 @@ void crearTurno() async{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Area de Cajas"),
+        title: Text("Area Financiera"),
       ),
       body: TurnosCajaList(),
       floatingActionButton: FloatingActionButton.extended(
@@ -126,7 +128,7 @@ class TurnosCajaList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection('TurnosCaja')
+          .collection('TurnosFinanciero')
           .orderBy(
             "Turno",
           )

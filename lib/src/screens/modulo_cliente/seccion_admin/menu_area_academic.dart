@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:math';
 
 
 class MenuAreaAcademicaPage extends StatefulWidget {
@@ -41,6 +42,8 @@ void crearTurno() async{
       Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
         String Nombre;
         String Apellido;
+        String email;
+        email=user.email;
         
         for (int i = 0; i < docs.documents.length; i++) {
               resultado.add(docs.documents[i].data.values.toList());
@@ -52,11 +55,27 @@ void crearTurno() async{
             
         var batch = db.batch();
         var increment = FieldValue.increment(1);
-        var refe = db.collection('TurnosAcademicos').document('turno');
-        DocumentReference ref = await db.collection('TurnosAcademico').add({
+        var rng = new Random();
+        var lol = new List.generate(12, (_) => rng.nextInt(100));
+
+        var refe = db.collection('TurnosAcademico').document('$lol');
+        print(lol);
+
+        batch.setData(refe, {
+          'Nombre':'$Nombre',
+          'Apellido': '$Apellido',
+          'email':  '$email',
+          'Turno': increment,
+
+
+        }, merge: true);
+        batch.commit();
+        
+        
+        /*DocumentReference ref = await db.collection('TurnosAcademico').add({
             'Nombre': '$Nombre',
             'Apellido': '$Apellido',
-            'Turno': FieldValue.increment(1), 
+            'Turno': 1, 
 
 
             
@@ -66,9 +85,11 @@ void crearTurno() async{
         
       
           setState(() => id = ref.documentID);
-          print(ref.documentID);
+          print(ref.documentID);*/
         DocumentReference ref2 = await db.collection('TurnosAcademico_Tokens').add({
-            'token': '$Token'
+            'token': '$Token',
+            'email':  '$email'
+
           });
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
