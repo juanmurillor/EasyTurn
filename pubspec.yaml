@@ -19,10 +19,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: 0.3.1
-  firebase_auth: 0.8.1
-  cloud_firestore: ^0.9.5+2
-  firebase_storage: ^2.1.0+1
+  firebase_core: ^0.4.0
+  firebase_auth: ^0.11.0
+  cloud_firestore: ^0.11.0+1
+  firebase_storage: ^3.0.0
   firebase_messaging: 2.2.0
 
 
@@ -37,7 +37,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+ 
   
   http: any
 
