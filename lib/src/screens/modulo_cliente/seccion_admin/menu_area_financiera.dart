@@ -111,6 +111,7 @@ void crearTurno() async{
     return Scaffold(
       appBar: AppBar(
         title: Text("Area Financiera"),
+        
       ),
       body: TurnosCajaList(),
       floatingActionButton: FloatingActionButton.extended(

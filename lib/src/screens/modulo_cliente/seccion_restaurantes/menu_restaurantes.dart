@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/carrito_compras.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/restaurantes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,14 +15,14 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
-            "http://192.168.0.18:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
+            "http://172.16.195.206:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
         headers: {"Accept": "application/json"});
 
     this.setState(() {
       data = json.decode(response.body);
     });
 
-    print(data[0]['nombrerestaurante']);
+    print(data[0]['idrestaurante']);
 
     return "success";
   }
@@ -37,6 +38,19 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Restaurantes'),
+          actions: <Widget>[
+          new IconButton(
+              icon: new Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+              onPressed: () =>Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CarritoComprasPage())
+          ),            
+          )
+          ],
         ),
         body: new ListView.builder(
           itemCount: data == null ? 0 : data.length,
