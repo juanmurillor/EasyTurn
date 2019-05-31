@@ -172,7 +172,6 @@ class _LoginPageState extends State<LoginPage> {
           ));
         }
       } catch (e) {
-        print(e.message);
         _scaffoldState.currentState.showSnackBar(new SnackBar(
           content: new Text(
             e.message,
