@@ -6,6 +6,7 @@ import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+
 class CarritoComprasPage extends StatefulWidget {
   CarritoComprasPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
@@ -40,20 +41,27 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
 
       var resultado = [];
       var resultadoJson = [];
+      Map resultjason;
       Buscar().buscarCarrito(user.email).then((QuerySnapshot docs) async {
         for (int i = 0; i < docs.documents.length; i++) {
-          resultado.add(docs.documents[i].data.values.toList());
+          resultjason = docs.documents[i].data;
+          resultado.add(docs.documents[i].data);
           resultadoJson.add(docs.documents[i].data.toString());
           //print(docs.documents[i].data);
 
         }
+        //print(resultado);
         //print(pedido.toString());
         // print("este es la lista "+resultado[0].toString());
         // print('Este es el resultadoJsn'+ resultadoJson.toString());
 
         //var pedidoMap =resultado[0];
-        List pedidoUsuario = resultadoJson;
+        List pedidoUsuario = resultado;
         print(pedidoUsuario);
+        //Map dato ;
+        //dato = resultado[0];
+        //print(dato);
+        //print(dato['totalPrecioProducto']);
         String emailUsuario = email;
         String nombreUsuario = Nombre;
         String apellidoUsuario = Apellido;
@@ -105,19 +113,37 @@ class CarritoCompraList extends StatelessWidget {
   final BaseAuth auth;
   final VoidCallback onSignedOut;
 
-  @override
-  Widget build(BuildContext context) {
-    String email;
-    Future<String> userEmail() async {
+
+  var listaUsuarios = [];
+  String Nombre;
+  String Apellido;
+  static String emailUsu = "";
+  
+    Future<String>  userEmail() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      email = user.email;
-      return email;
+      emailUsu = user.email;
+      //print(emailUsu);
+      }
+    borrarProducto(docId){
+      Firestore.instance.collection('ShoppingCar').document(docId).delete().catchError((e){
+        print(e);
+      });
+
     }
 
-    return StreamBuilder<QuerySnapshot>(
+
+
+      
+  @override
+  Widget build(BuildContext context) {
+    userEmail();
+    userEmail();
+    print(emailUsu);
+    return StreamBuilder<QuerySnapshot> (
+
       stream: Firestore.instance
           .collection('ShoppingCar')
-          .where('emailUsuario', isEqualTo: email)
+          .where('emailUsuario', isEqualTo: emailUsu )
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
@@ -177,6 +203,23 @@ class CarritoCompraList extends StatelessWidget {
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
+                             new RaisedButton.icon(
+                                          icon: new Icon(
+                                              Icons.delete_forever,
+                                              color: Colors.white),
+                                          label: new Text(
+                                            'Eliminar Producto',
+                                            style: new TextStyle(
+                                                fontSize: 15.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          color: Colors.red,
+                                          onPressed: () {
+                                            borrarProducto(document.documentID);
+
+                                          },
+                                        )
                           ],
                         ),
                       ],

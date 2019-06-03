@@ -17,6 +17,8 @@ class MenuAreaAcademicaPage extends StatefulWidget {
 
 class _MenuAreaAcademicaPage extends State<MenuAreaAcademicaPage> {
 
+final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   
   final db = Firestore.instance;
@@ -25,7 +27,29 @@ class _MenuAreaAcademicaPage extends State<MenuAreaAcademicaPage> {
 
 
 
+
 void crearTurno() async{
+  FirebaseUser user =await FirebaseAuth.instance.currentUser();
+  String emailUsu = user.email;
+  print(emailUsu);
+  
+  var data = db.collection('TurnosAcademico').where('email', isEqualTo: emailUsu ).snapshots();
+  print(data);
+
+      
+
+  if(data == data){
+
+     _scaffoldState.currentState.showSnackBar(new SnackBar(
+            content: new Text(
+              'Ya creaste un turno, porfavor espera ser atendido',
+              style: new TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Color(0xFFFF0000),
+          ));
+
+
+  }else{
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   String Token;
       FirebaseUser user =await FirebaseAuth.instance.currentUser();
@@ -58,6 +82,20 @@ void crearTurno() async{
         var rng = new Random();
         var lol = new List.generate(12, (_) => rng.nextInt(100));
 
+        
+
+        var refe2 = db.collection('TurnosAcademico').document('--turnos--');
+        batch.setData(refe2, {
+          'TurnoIncremental': increment,
+        }, merge: true);
+        
+        var document = await Firestore.instance.document('TurnosAcademico/--turnos--');
+        DocumentSnapshot snapshot = await db.collection('TurnosAcademico').document('--turnos--').get();
+        print(snapshot.data['TurnoIncremental']);
+
+        int Turno = snapshot.data['TurnoIncremental'];
+          
+
         var refe = db.collection('TurnosAcademico').document('$lol');
         print(lol);
 
@@ -65,11 +103,14 @@ void crearTurno() async{
           'Nombre':'$Nombre',
           'Apellido': '$Apellido',
           'email':  '$email',
-          'Turno': increment,
+          'Turno': Turno,
 
 
         }, merge: true);
         batch.commit();
+
+
+      
         
         
         /*DocumentReference ref = await db.collection('TurnosAcademico').add({
@@ -107,13 +148,14 @@ void crearTurno() async{
           });
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
-
+  }
 }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       key: _scaffoldState,
       appBar: AppBar(
         title: Text("Area Academica"),
       ),

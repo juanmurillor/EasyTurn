@@ -87,20 +87,26 @@ class _RestaurantesPage extends State<RestaurantesPage> {
             ],
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            expandedHeight: 20,
+            expandedHeight: 30.0,
             pinned: true,
+            elevation: 20,
+
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
+
+              title: Text("                                   "+
                 "${widget.data["nombrerestaurante"]}",
                 style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,
                     fontWeight: FontWeight.w700),
               ),
-              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 40),
+              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 900),
+              
             ),
-            title: Text(
+            title: Text(""+
+
               "${widget.data["descripcionrestaurante"]}",
+
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.black,

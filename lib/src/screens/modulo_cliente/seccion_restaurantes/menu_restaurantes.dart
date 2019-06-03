@@ -37,7 +37,11 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Restaurantes'),
+          title: new Text('Restaurantes',style: new TextStyle(
+              fontFamily: 'FugazOne',
+              fontSize: 23
+
+          ),),
           actions: <Widget>[
           new IconButton(
               icon: new Icon(
@@ -86,12 +90,14 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
                                     new Text(
                                         "${data[index]["nombrerestaurante"]}",
                                         style: TextStyle(
+                                            fontFamily: 'Questrial',
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w700),
                                         textAlign: TextAlign.right),
                                     new Text(
                                       "${data[index]["descripcionrestaurante"]}",
                                       style: TextStyle(
+                                        fontFamily: 'Questrial',
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w300),
                                       textAlign: TextAlign.right,

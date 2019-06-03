@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/menu_restaurantes.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/menu_secc_restaurantes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:easy_turn/src/screens/login/buscar.dart';
+
 
 
 class ClientePage extends StatefulWidget {
@@ -16,6 +20,31 @@ class ClientePage extends StatefulWidget {
     }
 class _ClientePageState extends State<ClientePage>{
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+
+   static String emailUsu = "";
+   static String Nombre = "";
+   static String Apellido = "";
+   var listaUsuarios = [];
+
+  
+    Future<String>  userEmail() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      emailUsu = user.email;
+      //print(emailUsu);
+      }
+
+    void usuario(){
+    
+
+    Buscar().buscarusuario(emailUsu).then((QuerySnapshot docs2) async {
+      for (int i = 0; i < docs2.documents.length; i++) {
+        listaUsuarios.add(docs2.documents[i].data.values.toList());
+        //print(docs.documents[i].data);
+      }
+      Nombre = listaUsuarios[0][3];
+      Apellido = listaUsuarios[0][0];
+    });
+    }
   
   @override
   void initState(){
@@ -40,10 +69,10 @@ class _ClientePageState extends State<ClientePage>{
     });
   }
 
- void moveToMenuRestaurantesPage(){
+ void moveToMenuSeccRestaurantesPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuRestaurantesPage()),
+                MaterialPageRoute(builder: (context) => MenuSeccRestaurantePage()),
               );
   }
   void moveToMenuSeccAdministrativaPage(){
@@ -69,9 +98,15 @@ void _signOut() async {
 
   @override
   Widget build(BuildContext context) {
+    userEmail();
+    usuario();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("EasyTurn"),
+        title: Text("EasyTurn",style: new TextStyle(
+          fontFamily: 'FugazOne',
+          fontSize: 30
+        ),),
         
           
       ),
@@ -79,13 +114,15 @@ void _signOut() async {
         child: new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: new Text("Arley Agudelo", style: new TextStyle(
+              accountName: new Text(Nombre+" "+Apellido, style: new TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Questrial'
               ),),
-              accountEmail: new Text("arleyyap@gmail.com",style: new TextStyle(
+              accountEmail: new Text(emailUsu,style: new TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w400,
+                 fontFamily: 'Questrial'
               ),),
               currentAccountPicture: new GestureDetector(
                 child: new CircleAvatar(
@@ -100,17 +137,17 @@ void _signOut() async {
               ),
             ),
                 new ListTile(
-              title: new Text("Cerrar Sesion",style: new TextStyle(fontSize: 15.0, color: Colors.black),),
+              title: new Text("Cerrar Sesion",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial', fontWeight: FontWeight.w500),),
               trailing: new Icon(Icons.close),
               onTap: _signOut,
             ), 
             new Divider(),
             new ListTile(
-              title: new Text("Terminos y Condiciones",style: new TextStyle(fontSize: 15.0, color: Colors.black),),
+              title: new Text("Terminos y Condiciones",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial'),),
               trailing: new Icon(Icons.info),
             ),
             new ListTile(
-              title: new Text("Acerca de EasyTurn",style: new TextStyle(fontSize: 15.0, color: Colors.black),),
+              title: new Text("Acerca de EasyTurn™",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial'),),
               trailing: new Icon(Icons.help),
             ),
          
@@ -137,14 +174,14 @@ void _signOut() async {
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Restaurantes",
+                        "Seccion de Restaurantes",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Questrial'
                       ),
                       ),
-                      onPressed: moveToMenuRestaurantesPage,
+                      onPressed: moveToMenuSeccRestaurantesPage,
                       )
                     ),
                     Container(
@@ -164,7 +201,7 @@ void _signOut() async {
               ),
             ),
             ),
-            onPressed: moveToMenuRestaurantesPage,
+            onPressed: moveToMenuSeccRestaurantesPage,
             ),
           ), 
           Padding(
@@ -180,14 +217,14 @@ void _signOut() async {
                child: Row(
                   children: <Widget>[
                     Container(
-                      width: 250,
+                      width: 258,
                       child: new FlatButton(
                        child: new Text(
                         "Seccion Administrativa",
-                      style: new TextStyle(fontSize: 34.0, 
+                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Questrial'
                       ),
                       ),
                       onPressed: moveToMenuSeccAdministrativaPage,

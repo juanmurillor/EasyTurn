@@ -203,7 +203,13 @@ class _LoginPageState extends State<LoginPage> {
     return new Scaffold(
         key: _scaffoldState,
         appBar: new AppBar(
-          title: new Text('Easy Turn'),
+          title: new Text('Easy Turn',style: new TextStyle(
+            fontFamily: 'FugazOne',
+            fontSize: 30,
+            
+          ),
+          textAlign: TextAlign.center,
+          ),
         ),
         body: new ListView(padding: EdgeInsets.all(16.0), children: <Widget>[
           new Image.asset(
@@ -224,12 +230,18 @@ class _LoginPageState extends State<LoginPage> {
     if (_formType == FormType.login) {
       return [
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Email'),
           validator: (value) =>
               value.isEmpty ? 'El Email no puede estar vacio' : null,
           onSaved: (value) => _email = value.trim(),
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Contraseña'),
           obscureText: true,
           validator: (value) =>
@@ -256,12 +268,18 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Email'),
           validator: (value) =>
               value.isEmpty ? 'El Email no puede estar vacio' : null,
           onSaved: (value) => _email = value,
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Contraseña'),
           obscureText: true,
           validator: (value) =>
@@ -269,18 +287,27 @@ class _LoginPageState extends State<LoginPage> {
           onSaved: (value) => _password = value,
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Nombre'),
           validator: (value) =>
               value.isEmpty ? 'El Nombre no puede estar vacio' : null,
           onSaved: (value) => _nombre = value,
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           decoration: new InputDecoration(labelText: 'Apellido'),
           validator: (value) =>
               value.isEmpty ? 'El Apellido no puede estar vacio' : null,
           onSaved: (value) => _apellido = value,
         ),
         new TextFormField(
+          style: new TextStyle(
+            fontFamily: 'Questrial'
+          ),
           keyboardType: TextInputType.number,
           decoration: new InputDecoration(labelText: 'Telefono'),
           validator: (value) =>
@@ -300,7 +327,9 @@ class _LoginPageState extends State<LoginPage> {
             style: new TextStyle(
                 fontSize: 20.0,
                 color: Colors.white,
-                fontWeight: FontWeight.w400),
+                fontWeight: FontWeight.w400,  
+            fontFamily: 'Questrial'
+         ),
           ),
           color: Colors.blue,
           onPressed: validateAndSubmit,
@@ -309,7 +338,10 @@ class _LoginPageState extends State<LoginPage> {
           child: new Text(
             'Crear cuenta',
             style: new TextStyle(
-                fontSize: 18.0, color: Colors.red, fontWeight: FontWeight.w400),
+                fontSize: 18.0,
+                color: Colors.red,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Questrial'),
           ),
           onPressed: moveToRegister,
         ),
@@ -322,7 +354,8 @@ class _LoginPageState extends State<LoginPage> {
             style: new TextStyle(
                 fontSize: 20.0,
                 color: Colors.white,
-                fontWeight: FontWeight.w400),
+                fontWeight: FontWeight.w400,
+                 fontFamily: 'Questrial'),
           ),
           color: Colors.blue,
           onPressed: validateAndSubmit,
@@ -333,7 +366,8 @@ class _LoginPageState extends State<LoginPage> {
             style: new TextStyle(
                 fontSize: 18.0,
                 color: Colors.blue,
-                fontWeight: FontWeight.w400),
+                fontWeight: FontWeight.w400,
+                 fontFamily: 'Questrial'),
           ),
           onPressed: moveToLogin,
         ),
