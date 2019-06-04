@@ -6,7 +6,6 @@ import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
 class CarritoComprasPage extends StatefulWidget {
   CarritoComprasPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
@@ -20,7 +19,7 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
   final db = Firestore.instance;
   String id;
 
-   final GlobalKey<ScaffoldState> _scaffoldState =
+  final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
   void crearPedido() async {
@@ -59,17 +58,22 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
         // print('Este es el resultadoJsn'+ resultadoJson.toString());
 
         //var pedidoMap =resultado[0];
-        var pedidos=[];
+        var pedidos = [];
         List pedidoUsuario = resultado;
-        for(int i = 0; i<pedidoUsuario.length; i++){
+        for (int i = 0; i < pedidoUsuario.length; i++) {
           pedidos.add(pedidoUsuario[i]);
         }
-        
-        print(pedidoUsuario);
-        Map dato ;
-        dato = resultado[0];
-        print(dato);
-        print(dato['totalPrecioProducto']);
+        Map datos;
+        //print(pedidoUsuario);
+        for (var i = 0; i < resultado.length; i++) {
+          datos.addAll(resultado[i]);
+          //datos=;
+        }
+
+        print(datos);
+
+        //print(producto1);
+
         String emailUsuario = email;
         String nombreUsuario = Nombre;
         String apellidoUsuario = Apellido;
@@ -85,15 +89,26 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
         batch.setData(
             refe,
             {
-              'pedidoUsuario': '$pedidoUsuario',
+              'pedidosUsuario': datos,
               'emailUsuario': '$emailUsuario',
               'nombreUsuario': '$nombreUsuario',
               'apellidoUsuario': '$apellidoUsuario',
               'pedidoAtendido': '$pedidoAtendido',
-              
             },
             merge: true);
         batch.commit();
+
+        _scaffoldState.currentState.showSnackBar(new SnackBar(
+          content: new Text(
+            'Pedido realizado exitosamente',
+            style: new TextStyle(
+                color: Colors.white,
+                fontFamily: 'Questrial',
+                fontSize: 15,
+                fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: Color(0xFF01DF3A),
+        ));
       });
     });
   }
@@ -103,22 +118,13 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
     return new Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
-        title: Text('Carrito de compras',style: new TextStyle(
-          fontFamily: 'FugazOne',
-          fontSize: 23
-        ),),
+        title: Text(
+          'Mis Pedidos',
+          style: new TextStyle(fontFamily: 'FugazOne', fontSize: 23),
+        ),
       ),
       body: CarritoCompraList(),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.receipt),
-        label: Text("Realizar Pedido",style: new TextStyle(
-          fontFamily: 'Questrial',
-          fontSize: 15,
-          fontWeight: FontWeight.w600
-        ),),
-        onPressed: crearPedido,
-        isExtended: true,
-      ),
+     
     );
   }
 }
@@ -128,42 +134,40 @@ class CarritoCompraList extends StatelessWidget {
   final BaseAuth auth;
   final VoidCallback onSignedOut;
 
-   final GlobalKey<ScaffoldState> _scaffoldState =
+  final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
-
 
   var listaUsuarios = [];
   String Nombre;
   String Apellido;
   static String emailUsu = "";
-  
-    Future<String>  userEmail() async {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      emailUsu = user.email;
-      //print(emailUsu);
-      }
-    borrarProducto(docId){
-      Firestore.instance.collection('ShoppingCar').document(docId).delete().catchError((e){
-        print(e);
-      });
 
-    }
+  Future<String> userEmail() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    emailUsu = user.email;
+    //print(emailUsu);
+  }
 
+  borrarProducto(docId) {
+    Firestore.instance
+        .collection('ShoppingCar')
+        .document(docId)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
 
-
-      
   @override
   Widget build(BuildContext context) {
     userEmail();
     userEmail();
     print(emailUsu);
-    
-    return StreamBuilder<QuerySnapshot> (
-      
 
+    return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('ShoppingCar')
-          .where('emailUsuario', isEqualTo: emailUsu )
+          .where('emailUsuario', isEqualTo: emailUsu)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
@@ -201,66 +205,69 @@ class CarritoCompraList extends StatelessWidget {
                                 style: TextStyle(
                                     fontFamily: 'Questrial',
                                     fontSize: 17.0,
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
                             new Text('Producto: ${document['nombreProducto']}',
                                 style: TextStyle(
-                                  fontFamily: 'Questrial',
+                                    fontFamily: 'Questrial',
                                     fontSize: 17.0,
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
-                            new Text('Precio: ${document['precioProducto']}',
+                            new Text('Precio: ${document['precioProducto']} COP',
                                 style: TextStyle(
-                                  fontFamily: 'Questrial',
+                                    fontFamily: 'Questrial',
                                     fontSize: 17.0,
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
                             new Text(
                                 'Cantidad: ${document['cantidadProducto']}',
                                 style: TextStyle(
-                                  fontFamily: 'Questrial',
+                                    fontFamily: 'Questrial',
                                     fontSize: 17.0,
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
                             new Text(
-                                'Precio Total: ${document['totalPrecioProducto']}',
+                                'Precio Total: ${document['totalPrecioProducto']} COP',
                                 style: TextStyle(
-                                  fontFamily: 'Questrial',
+                                    fontFamily: 'Questrial',
                                     fontSize: 17.0,
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
-                             new RaisedButton.icon(
-                                          icon: new Icon(
-                                              Icons.delete_forever,
-                                              color: Colors.white),
-                                          label: new Text(
-                                            'Eliminar Producto',
-                                            style: new TextStyle(
-                                              fontFamily: 'Questrial',
-                                                fontSize: 17.0,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          color: Colors.red,
-                                          onPressed: () {
-                                            borrarProducto(document.documentID);
-                                             _scaffoldState.currentState
-                                                  .showSnackBar(new SnackBar(
-                                                content: new Text(
-                                                  'Producto eliminado exitosamente',
-                                                  style: new TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: 'Questrial',
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                                backgroundColor:
-                                                    Color(0xFF01DF3A),
-                                              ));
-
-                                          },
-                                        )
+                                new Text(
+                                'Estado pedido: ${document['estadoPedido']}',
+                                style: TextStyle(
+                                    fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.right),
+                            new RaisedButton.icon(
+                              icon: new Icon(Icons.delete_forever,
+                                  color: Colors.white),
+                              label: new Text(
+                                'Eliminar Pedido',
+                                style: new TextStyle(
+                                    fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              color: Colors.red,
+                              onPressed: () {
+                                borrarProducto(document.documentID);
+                                _scaffoldState.currentState
+                                    .showSnackBar(new SnackBar(
+                                  content: new Text(
+                                    'Producto eliminado exitosamente',
+                                    style: new TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Questrial',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  backgroundColor: Color(0xFF01DF3A),
+                                ));
+                              },
+                            )
                           ],
                         ),
                       ],

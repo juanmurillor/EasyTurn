@@ -95,52 +95,7 @@ class _MenuSeccRestaurantePage extends State<MenuSeccRestaurantePage>{
             onPressed: moveToMenuRestaurantesPage,
             ),
           ), 
-          Padding(
-             padding: const EdgeInsets.all(16.0),
-             child: FlatButton(
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 250,
-                      child: new FlatButton(
-                       child: new Text(
-                        "Carrito de compras",
-                      style: new TextStyle(fontSize: 35.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                       fontFamily: 'Questrial'
-                      ),
-                      ),
-                      
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2017/10/18/22/08/cart-2865706_960_720.jpg"),
-                        ),
-                      ),
-                    )
-                  ],
-               ),
-              ),
-            ),
-            ),
-            onPressed: moveToCarritoComprasPage,
-             ),
-            ),
+          
              Padding(
              padding: const EdgeInsets.all(16.0),
              child: new FlatButton(
@@ -184,7 +139,7 @@ class _MenuSeccRestaurantePage extends State<MenuSeccRestaurantePage>{
               ),
             ),
             ),
-            onPressed: moveToMisPedidoPage,
+            onPressed: moveToCarritoComprasPage,
              ),
             )
           ],

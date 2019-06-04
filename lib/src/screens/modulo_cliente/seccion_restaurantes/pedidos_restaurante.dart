@@ -74,7 +74,7 @@ class CarritoCompraList extends StatelessWidget {
                           children: <Widget>[
                             CircleAvatar(
                               backgroundImage:
-                                  NetworkImage("https://cdn.pixabay.com/photo/2018/06/01/09/23/aqua-3445987_960_720.jpg"),
+                                  NetworkImage("https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_960_720.png"),
                               radius: 35,
                             ),
                           ],
@@ -86,16 +86,17 @@ class CarritoCompraList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             new Text(
-                                'restaurante: ${document['nombreUsuario']}',
+                                'Nombre: ${document['nombreUsuario']} ${document['apellidoUsuario']}',
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
-                            new Text('producto: ${document['apellidoUsuario']}',
+                            new Text('Email: ${document['emailUsuario']}',
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
+                          
                             
                           ],
                         ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/carrito_compras.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +29,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
-            "http://192.168.0.18:8080/easyturn/rest/controllers/productrestaurantes/getProductByRestaurant/${widget.data["idrestaurante"]}"),
+            "http://172.16.194.89:8080/easyturn/rest/controllers/productrestaurantes/getProductByRestaurant/${widget.data["idrestaurante"]}"),
         headers: {"Accept": "application/json"});
 
     this.setState(() {
@@ -74,11 +75,11 @@ class _RestaurantesPage extends State<RestaurantesPage> {
           SliverAppBar(
             actions: <Widget>[
               new IconButton(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.topCenter,
                 icon: new Icon(
-                  Icons.shopping_cart,
+                  Icons.playlist_add,
                   color: Colors.blue,
-                  size: 40.0,
+                  size: 45.0,
                 ),
                 onPressed: () => Navigator.push(
                     context,
@@ -167,7 +168,11 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                         ),
                                         new Row(
                                           children: <Widget>[
-                                            Text('Cantidad: ',style: new TextStyle(fontFamily: 'Questrial'),),
+                                            Text(
+                                              'Cantidad: ',
+                                              style: new TextStyle(
+                                                  fontFamily: 'Questrial'),
+                                            ),
                                             _itemCount != 0
                                                 ? new IconButton(
                                                     icon:
@@ -185,10 +190,10 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                         ),
                                         new RaisedButton.icon(
                                           icon: new Icon(
-                                              Icons.add_shopping_cart,
+                                              Icons.playlist_add,
                                               color: Colors.white),
                                           label: new Text(
-                                            'Agregar',
+                                            'Realizar pedido',
                                             style: new TextStyle(
                                                 fontFamily: 'Questrial',
                                                 fontSize: 15.0,
@@ -209,6 +214,8 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                                 data[index]["precioproducto"];
                                             String imagenProducto =
                                                 data[index]["imagenproducto"];
+                                            int idProducto =
+                                                data[index]["idproductos"];
 
                                             FirebaseUser user =
                                                 await FirebaseAuth.instance
@@ -216,6 +223,29 @@ class _RestaurantesPage extends State<RestaurantesPage> {
 
                                             String email;
                                             email = user.email;
+                                            var resultado = [];
+                                            String Nombre;
+                                            String Apellido;
+                                            Buscar()
+                                                .buscarusuario(user.email)
+                                                .then(
+                                                    (QuerySnapshot docs) async {
+                                              String email;
+                                              email = user.email;
+
+                                              for (int i = 0;
+                                                  i < docs.documents.length;
+                                                  i++) {
+                                                resultado.add(docs
+                                                    .documents[i].data.values
+                                                    .toList());
+                                                print(docs.documents[i].data);
+                                              }
+                                              print("este es el nombre " +
+                                                  resultado[0][3]);
+                                              Nombre = resultado[0][3];
+                                              Apellido = resultado[0][0];
+                                            
 
                                             if (_itemCount < 1) {
                                               _scaffoldState.currentState
@@ -249,6 +279,8 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                                   {
                                                     'idRestaurante':
                                                         idRestaurante,
+                                                    'idProducto':
+                                                        idProducto,
                                                     'correoRestaurante':
                                                         '$correoRestaruante',
                                                     'nombreRestaurante':
@@ -258,16 +290,22 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                                     'precioProducto':
                                                         precioProducto,
                                                     'emailUsuario': '$email',
+                                                    'nombreUsuario': '$Nombre',
+                                                    'apellidoUsuario':
+                                                        '$Apellido',
                                                     'imagenProducto':
                                                         '$imagenProducto',
                                                     'cantidadProducto':
                                                         _itemCount,
                                                     'totalPrecioProducto':
                                                         _itemCount *
-                                                            precioProducto
+                                                            precioProducto,
+                                                    'estadoPedido':
+                                                        'No Atendido'
                                                   },
                                                   merge: true);
                                               batch.commit();
+                                              
                                               _scaffoldState.currentState
                                                   .showSnackBar(new SnackBar(
                                                 content: new Text(
@@ -282,10 +320,13 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                                 backgroundColor:
                                                     Color(0xFF01DF3A),
                                               ));
+                                              
                                             }
                                           },
-                                        )
-                                      ])
+                                        );
+                                          })]
+                                      )
+                                      
                                 ],
                               )
                             ],
@@ -295,6 +336,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                     ],
                   )),
                 );
+                
               },
               childCount: data == null ? 0 : data.length,
             ),
@@ -303,6 +345,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
       ),
     );
   }
+   
 }
 
 class ListTileItem extends StatefulWidget {

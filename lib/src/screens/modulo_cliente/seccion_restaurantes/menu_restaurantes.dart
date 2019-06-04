@@ -15,7 +15,7 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
-            "http://192.168.0.18:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
+            "http://172.16.194.89:8080/easyturn/rest/controllers/restaurante/getDataRestaurante"),
         headers: {"Accept": "application/json"});
 
     this.setState(() {
@@ -45,7 +45,7 @@ class _MenuRestaurantesPage extends State<MenuRestaurantesPage> {
           actions: <Widget>[
           new IconButton(
               icon: new Icon(
-                Icons.shopping_cart,
+                Icons.playlist_add,
                 color: Colors.white,
               ),
               onPressed: () =>Navigator.push(
