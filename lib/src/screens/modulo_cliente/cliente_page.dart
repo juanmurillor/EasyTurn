@@ -116,12 +116,12 @@ void _signOut() async {
             new UserAccountsDrawerHeader(
               accountName: new Text(Nombre+" "+Apellido, style: new TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
                 fontFamily: 'Questrial'
               ),),
               accountEmail: new Text(emailUsu,style: new TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
                  fontFamily: 'Questrial'
               ),),
               currentAccountPicture: new GestureDetector(
@@ -142,15 +142,7 @@ void _signOut() async {
               onTap: _signOut,
             ), 
             new Divider(),
-            new ListTile(
-              title: new Text("Terminos y Condiciones",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial'),),
-              trailing: new Icon(Icons.info),
-            ),
-            new ListTile(
-              title: new Text("Acerca de EasyTurn™",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial'),),
-              trailing: new Icon(Icons.help),
-            ),
-         
+           
           ],
         )
       ),

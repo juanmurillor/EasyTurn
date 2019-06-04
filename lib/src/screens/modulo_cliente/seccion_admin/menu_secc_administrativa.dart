@@ -39,7 +39,10 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Seccion Administrativa"),
+        title: Text("Seccion Administrativa",style: new TextStyle(
+          fontFamily: 'FugazOne',
+          fontSize: 23
+        ),),
       ),
       body: new  ListView(
         scrollDirection: Axis.vertical,
@@ -62,10 +65,10 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       child: new FlatButton(
                       child: new Text(
                         "Turnos Area Academica",
-                      style: new TextStyle(fontSize: 35.0, 
+                     style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic
+                      fontWeight: FontWeight.w600,
+                       fontFamily: 'Questrial'
                       ),
                       ),
                       )
@@ -108,10 +111,10 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       child: new FlatButton(
                        child: new Text(
                         "Turnos Area Financiera",
-                      style: new TextStyle(fontSize: 35.0, 
+                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic
+                      fontWeight: FontWeight.w600,
+                       fontFamily: 'Questrial'
                       ),
                       ),
                       
@@ -156,8 +159,8 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                         "Turnos Area de Cajas",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic
+                      fontWeight: FontWeight.w600,
+                       fontFamily: 'Questrial'
                       ),
                       ),
                       

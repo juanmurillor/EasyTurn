@@ -7,10 +7,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.onSignedInAsAdministrativo, this.onSignedInAsRestaurante, this.onSignedInAsCliente});
+  LoginPage({this.auth,  this.onSignedInAsCliente});
   final BaseAuth auth;
-  final VoidCallback onSignedInAsAdministrativo;
-  final VoidCallback onSignedInAsRestaurante;
+  
   final VoidCallback onSignedInAsCliente;
 
 
@@ -45,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
   
 
   void initState() {
-    _tipodeusuario.addAll(["Cliente", "Restaurante", "Administrativo"]);
+    _tipodeusuario.addAll(["Cliente"]);
     _tipodeusuarios = _tipodeusuario.elementAt(0);
   }
 
@@ -84,14 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               //print(docs.documents[i].data);
             }
             print(resultado[0][1]);
-            if (resultado[0][1] == "Administrativo") {
-              print('Bienvenido Usuario Administrativo');
-              widget.onSignedInAsAdministrativo();
-            }
-            if (resultado[0][1] == "Restaurante") {
-              print('Bienvenido Usuario Restaurante');
-              widget.onSignedInAsRestaurante();
-            }
+           
             if (resultado[0][1] == "Cliente") {
               print('Bienvenido Usuario Cliente');
               widget.onSignedInAsCliente();             

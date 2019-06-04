@@ -111,6 +111,20 @@ class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
               .add({'token': '$Token', 'email': '$email'});
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
+
+            _scaffoldState.currentState.showSnackBar(new SnackBar(
+          content: new Text(
+            'Turno creado exitosamente, Turno #: $Turno',
+            style: new TextStyle(
+              color: Colors.white,
+              fontFamily: 'Questrial',
+              fontSize: 15,
+              fontWeight: FontWeight.w600
+              ),
+          ),
+          backgroundColor: Color(0xFF01DF3A),
+        ));
+
         });
       } else {
         _scaffoldState.currentState.showSnackBar(new SnackBar(
@@ -137,12 +151,19 @@ class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
     return Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
-        title: Text("Area de Cajas"),
+        title: Text("Area de Cajas",style: new TextStyle(
+          fontFamily: 'FugazOne',
+          fontSize: 23
+        ),),
       ),
       body: TurnosCajaList(),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.add_circle),
-        label: Text("Pedir Turno"),
+        label: Text("Pedir Turno",style: new TextStyle(
+          fontFamily: 'Questrial',
+          fontSize: 15,
+          fontWeight: FontWeight.w600
+        ),),
         onPressed: crearTurno,
         isExtended: true,
       ),
@@ -175,23 +196,35 @@ class TurnosCajaList extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        new Column(
+                         new Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             new Text('Turno: ${document['Turno']}',
                                 style: TextStyle(
-                                    fontSize: 20.0,
+                                    fontSize: 30.0,
+                                    fontFamily: 'Questrial',
                                     fontWeight: FontWeight.w700),
                                 textAlign: TextAlign.right),
-                            new Text('Apellido: ${document['Apellido']}',
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700),
-                                textAlign: TextAlign.right),
+                          ]),
+                           new Column(
+                            children: <Widget>[
+                              new Text("     ")
+                            ],
+                          ),
+                        new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
                             new Text('Nombre: ${document['Nombre']}',
                                 style: TextStyle(
                                     fontSize: 20.0,
-                                    fontWeight: FontWeight.w700),
+                                    fontFamily: 'Questrial',
+                                    fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.right),
+                            new Text('Apellido: ${document['Apellido']}',
+                                style: TextStyle(
+                                     fontSize: 20.0,
+                                    fontFamily: 'Questrial',
+                                    fontWeight: FontWeight.w500),
                                 textAlign: TextAlign.right),
                           ],
                         )

@@ -20,6 +20,9 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
   final db = Firestore.instance;
   String id;
 
+   final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
+
   void crearPedido() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     String email;
@@ -56,7 +59,12 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
         // print('Este es el resultadoJsn'+ resultadoJson.toString());
 
         //var pedidoMap =resultado[0];
+        var pedidos=[];
         List pedidoUsuario = resultado;
+        for(int i = 0; i<pedidoUsuario.length; i++){
+          pedidos.add(pedidoUsuario[i]);
+        }
+        
         print(pedidoUsuario);
         Map dato ;
         dato = resultado[0];
@@ -93,13 +101,21 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
-        title: Text('Carrito de compras'),
+        title: Text('Carrito de compras',style: new TextStyle(
+          fontFamily: 'FugazOne',
+          fontSize: 23
+        ),),
       ),
       body: CarritoCompraList(),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.receipt),
-        label: Text("Realizar Pedido"),
+        label: Text("Realizar Pedido",style: new TextStyle(
+          fontFamily: 'Questrial',
+          fontSize: 15,
+          fontWeight: FontWeight.w600
+        ),),
         onPressed: crearPedido,
         isExtended: true,
       ),
@@ -111,6 +127,9 @@ class CarritoCompraList extends StatelessWidget {
   CarritoCompraList({this.auth, this.onSignedOut});
   final BaseAuth auth;
   final VoidCallback onSignedOut;
+
+   final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
 
   var listaUsuarios = [];
@@ -138,7 +157,9 @@ class CarritoCompraList extends StatelessWidget {
     userEmail();
     userEmail();
     print(emailUsu);
+    
     return StreamBuilder<QuerySnapshot> (
+      
 
       stream: Firestore.instance
           .collection('ShoppingCar')
@@ -151,6 +172,7 @@ class CarritoCompraList extends StatelessWidget {
             return new Text('Loading...');
           default:
             return new ListView(
+              key: _scaffoldState,
               children:
                   snapshot.data.documents.map((DocumentSnapshot document) {
                 return new Card(
@@ -175,32 +197,37 @@ class CarritoCompraList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             new Text(
-                                'restaurante: ${document['nombreRestaurante']}',
+                                'Restaurante: ${document['nombreRestaurante']}',
                                 style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500),
+                                    fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.right),
-                            new Text('producto: ${document['nombreProducto']}',
+                            new Text('Producto: ${document['nombreProducto']}',
                                 style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500),
+                                  fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.right),
-                            new Text('precio: ${document['precioProducto']}',
+                            new Text('Precio: ${document['precioProducto']}',
                                 style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500),
+                                  fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.right),
                             new Text(
-                                'cantidad: ${document['cantidadProducto']}',
+                                'Cantidad: ${document['cantidadProducto']}',
                                 style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500),
+                                  fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.right),
                             new Text(
                                 'Precio Total: ${document['totalPrecioProducto']}',
                                 style: TextStyle(
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500),
+                                  fontFamily: 'Questrial',
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.right),
                              new RaisedButton.icon(
                                           icon: new Icon(
@@ -209,13 +236,28 @@ class CarritoCompraList extends StatelessWidget {
                                           label: new Text(
                                             'Eliminar Producto',
                                             style: new TextStyle(
-                                                fontSize: 15.0,
+                                              fontFamily: 'Questrial',
+                                                fontSize: 17.0,
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.w400),
+                                                fontWeight: FontWeight.w600),
                                           ),
                                           color: Colors.red,
                                           onPressed: () {
                                             borrarProducto(document.documentID);
+                                             _scaffoldState.currentState
+                                                  .showSnackBar(new SnackBar(
+                                                content: new Text(
+                                                  'Producto eliminado exitosamente',
+                                                  style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Questrial',
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                backgroundColor:
+                                                    Color(0xFF01DF3A),
+                                              ));
 
                                           },
                                         )

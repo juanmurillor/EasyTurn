@@ -22,6 +22,9 @@ class _RestaurantesPage extends State<RestaurantesPage> {
   final db = Firestore.instance;
   String id;
 
+  final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
+
   Future<String> getData() async {
     http.Response response = await http.get(
         Uri.encodeFull(
@@ -48,6 +51,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       body: new CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -90,26 +94,25 @@ class _RestaurantesPage extends State<RestaurantesPage> {
             expandedHeight: 30.0,
             pinned: true,
             elevation: 20,
-
             flexibleSpace: FlexibleSpaceBar(
-
-              title: Text("${widget.data["nombrerestaurante"]}",
+              title: Text(
+                "${widget.data["nombrerestaurante"]}",
                 style: TextStyle(
+                    fontFamily: 'Questrial',
                     fontSize: 30,
                     color: Colors.black,
                     fontWeight: FontWeight.w700),
               ),
-              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 35 ),
-              
+              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 35),
             ),
             title: Text(
               "${widget.data["descripcionrestaurante"]}",
               style: TextStyle(
+                  fontFamily: 'Questrial',
                   fontSize: 15,
                   color: Colors.black,
                   fontWeight: FontWeight.w300),
             ),
-            
           ),
           new SliverList(
             delegate: new SliverChildBuilderDelegate(
@@ -149,6 +152,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                             "${data[index]["nombreproducto"]}",
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
+                                                fontFamily: 'Questrial',
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.w700),
                                             textAlign: TextAlign.right),
@@ -156,13 +160,14 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                           "Precio: ${data[index]["precioproducto"]}",
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
+                                              fontFamily: 'Questrial',
                                               fontSize: 18.0,
                                               fontWeight: FontWeight.w300),
                                           textAlign: TextAlign.right,
                                         ),
                                         new Row(
                                           children: <Widget>[
-                                            Text('Cantidad: '),
+                                            Text('Cantidad: ',style: new TextStyle(fontFamily: 'Questrial'),),
                                             _itemCount != 0
                                                 ? new IconButton(
                                                     icon:
@@ -185,6 +190,7 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                           label: new Text(
                                             'Agregar',
                                             style: new TextStyle(
+                                                fontFamily: 'Questrial',
                                                 fontSize: 15.0,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400),
@@ -193,8 +199,8 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                           onPressed: () async {
                                             String correoRestaruante =
                                                 widget.data["email_Usuarios"];
-                                            String nombreRestaruante =
-                                                widget.data["nombrerestaurante"];
+                                            String nombreRestaruante = widget
+                                                .data["nombrerestaurante"];
                                             int idRestaurante =
                                                 widget.data["idrestaurante"];
                                             String nombresProducto =
@@ -211,38 +217,72 @@ class _RestaurantesPage extends State<RestaurantesPage> {
                                             String email;
                                             email = user.email;
 
-                                            var batch = db.batch();
-                                            var rng = new Random();
-                                            var rdmDocument = new List.generate(
-                                                12, (_) => rng.nextInt(100));
+                                            if (_itemCount < 1) {
+                                              _scaffoldState.currentState
+                                                  .showSnackBar(new SnackBar(
+                                                content: new Text(
+                                                  'La cantidad del producto debe ser mayor a 0',
+                                                  style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Questrial',
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                backgroundColor:
+                                                    Color(0xFFFF0000),
+                                              ));
+                                            } else {
+                                              var batch = db.batch();
+                                              var rng = new Random();
+                                              var rdmDocument =
+                                                  new List.generate(12,
+                                                      (_) => rng.nextInt(100));
 
-                                            var refe = db
-                                                .collection('ShoppingCar')
-                                                .document('$rdmDocument');
-                                            print(rdmDocument);
+                                              var refe = db
+                                                  .collection('ShoppingCar')
+                                                  .document('$rdmDocument');
+                                              print(rdmDocument);
 
-                                            batch.setData(
-                                                refe,
-                                                {
-                                                  'idRestaurante':
-                                                      idRestaurante,
-                                                  'correoRestaurante':
-                                                      '$correoRestaruante',
-                                                  'nombreRestaurante':
-                                                      '$nombreRestaruante',
-                                                  'nombreProducto':
-                                                      '$nombresProducto',
-                                                  'precioProducto':
-                                                      precioProducto,
-                                                  'emailUsuario': 
-                                                      '$email',
-                                                  'imagenProducto':
-                                                      '$imagenProducto',
-                                                  'cantidadProducto': _itemCount,
-                                                  'totalPrecioProducto': _itemCount*precioProducto
-                                                },
-                                                merge: true);
-                                            batch.commit();
+                                              batch.setData(
+                                                  refe,
+                                                  {
+                                                    'idRestaurante':
+                                                        idRestaurante,
+                                                    'correoRestaurante':
+                                                        '$correoRestaruante',
+                                                    'nombreRestaurante':
+                                                        '$nombreRestaruante',
+                                                    'nombreProducto':
+                                                        '$nombresProducto',
+                                                    'precioProducto':
+                                                        precioProducto,
+                                                    'emailUsuario': '$email',
+                                                    'imagenProducto':
+                                                        '$imagenProducto',
+                                                    'cantidadProducto':
+                                                        _itemCount,
+                                                    'totalPrecioProducto':
+                                                        _itemCount *
+                                                            precioProducto
+                                                  },
+                                                  merge: true);
+                                              batch.commit();
+                                              _scaffoldState.currentState
+                                                  .showSnackBar(new SnackBar(
+                                                content: new Text(
+                                                  'Producto agregado al carrito exitosamente',
+                                                  style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Questrial',
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                backgroundColor:
+                                                    Color(0xFF01DF3A),
+                                              ));
+                                            }
                                           },
                                         )
                                       ])
