@@ -93,25 +93,23 @@ class _RestaurantesPage extends State<RestaurantesPage> {
 
             flexibleSpace: FlexibleSpaceBar(
 
-              title: Text("                                   "+
-                "${widget.data["nombrerestaurante"]}",
+              title: Text("${widget.data["nombrerestaurante"]}",
                 style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,
                     fontWeight: FontWeight.w700),
               ),
-              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 900),
+              titlePadding: EdgeInsetsDirectional.only(start: 13, bottom: 35 ),
               
             ),
-            title: Text(""+
-
+            title: Text(
               "${widget.data["descripcionrestaurante"]}",
-
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.black,
                   fontWeight: FontWeight.w300),
             ),
+            
           ),
           new SliverList(
             delegate: new SliverChildBuilderDelegate(

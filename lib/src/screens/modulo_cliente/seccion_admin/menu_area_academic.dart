@@ -6,7 +6,6 @@ import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:math';
 
-
 class MenuAreaAcademicaPage extends StatefulWidget {
   MenuAreaAcademicaPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
@@ -16,104 +15,91 @@ class MenuAreaAcademicaPage extends StatefulWidget {
 }
 
 class _MenuAreaAcademicaPage extends State<MenuAreaAcademicaPage> {
-
-final GlobalKey<ScaffoldState> _scaffoldState =
+  final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
-  
   final db = Firestore.instance;
 
-    String id;
+  String id;
 
+  void crearTurno() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    String emailUsu = user.email;
+    print(emailUsu);
 
+    getTurno(String emailsito) {
+      return db
+          .collection('TurnosAcademico')
+          .where('email', isEqualTo: emailUsu)
+          .getDocuments();
+    }
 
+    getTurno(emailUsu).then((QuerySnapshot docs) {
+      if (docs.documents.isEmpty) {
+        FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+        String Token;
 
-void crearTurno() async{
-  FirebaseUser user =await FirebaseAuth.instance.currentUser();
-  String emailUsu = user.email;
-  print(emailUsu);
-  
-  var data = db.collection('TurnosAcademico').where('email', isEqualTo: emailUsu ).snapshots();
-  print(data);
+        _firebaseMessaging.getToken().then((token) {
+          print('Este es el token en menu_area_academica');
+          Token = token;
+          print(token);
+        });
 
-      
+        print("signed in" + user.email);
 
-  if(data == data){
+        var resultado = [];
+        Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
+          String Nombre;
+          String Apellido;
+          String email;
+          email = user.email;
 
-     _scaffoldState.currentState.showSnackBar(new SnackBar(
-            content: new Text(
-              'Ya creaste un turno, porfavor espera ser atendido',
-              style: new TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Color(0xFFFF0000),
-          ));
+          for (int i = 0; i < docs.documents.length; i++) {
+            resultado.add(docs.documents[i].data.values.toList());
+            print(docs.documents[i].data);
+          }
+          print("este es el nombre " + resultado[0][3]);
+          Nombre = resultado[0][3];
+          Apellido = resultado[0][0];
 
+          var batch = db.batch();
+          var increment = FieldValue.increment(1);
+          var rng = new Random();
+          var lol = new List.generate(12, (_) => rng.nextInt(100));
 
-  }else{
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
-  String Token;
-      FirebaseUser user =await FirebaseAuth.instance.currentUser();
+          var refe2 = db.collection('TurnosAcademico').document('--turnos--');
+          batch.setData(
+              refe2,
+              {
+                'TurnoIncremental': increment,
+              },
+              merge: true);
 
-      _firebaseMessaging.getToken().then((token){
-      print('Este es el token en menu_area_academica');
-      Token = token;
-      print(token);
-    });
+          var document =
+              await Firestore.instance.document('TurnosAcademico/--turnos--');
+          DocumentSnapshot snapshot = await db
+              .collection('TurnosAcademico')
+              .document('--turnos--')
+              .get();
+          print(snapshot.data['TurnoIncremental']);
 
-      print("signed in" + user.email);
-      
-      var resultado = [];
-      Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
-        String Nombre;
-        String Apellido;
-        String email;
-        email=user.email;
-        
-        for (int i = 0; i < docs.documents.length; i++) {
-              resultado.add(docs.documents[i].data.values.toList());
-              print(docs.documents[i].data);
-            }
-            print("este es el nombre "+resultado[0][3]);
-            Nombre = resultado[0][3];
-            Apellido = resultado[0][0];
-            
-        var batch = db.batch();
-        var increment = FieldValue.increment(1);
-        var rng = new Random();
-        var lol = new List.generate(12, (_) => rng.nextInt(100));
+          int Turno = snapshot.data['TurnoIncremental'];
 
-        
+          var refe = db.collection('TurnosAcademico').document('$lol');
+          print(lol);
 
-        var refe2 = db.collection('TurnosAcademico').document('--turnos--');
-        batch.setData(refe2, {
-          'TurnoIncremental': increment,
-        }, merge: true);
-        
-        var document = await Firestore.instance.document('TurnosAcademico/--turnos--');
-        DocumentSnapshot snapshot = await db.collection('TurnosAcademico').document('--turnos--').get();
-        print(snapshot.data['TurnoIncremental']);
+          batch.setData(
+              refe,
+              {
+                'Nombre': '$Nombre',
+                'Apellido': '$Apellido',
+                'email': '$email',
+                'Turno': Turno,
+              },
+              merge: true);
+          batch.commit();
 
-        int Turno = snapshot.data['TurnoIncremental'];
-          
-
-        var refe = db.collection('TurnosAcademico').document('$lol');
-        print(lol);
-
-        batch.setData(refe, {
-          'Nombre':'$Nombre',
-          'Apellido': '$Apellido',
-          'email':  '$email',
-          'Turno': Turno,
-
-
-        }, merge: true);
-        batch.commit();
-
-
-      
-        
-        
-        /*DocumentReference ref = await db.collection('TurnosAcademico').add({
+          /*DocumentReference ref = await db.collection('TurnosAcademico').add({
             'Nombre': '$Nombre',
             'Apellido': '$Apellido',
             'Turno': 1, 
@@ -127,21 +113,26 @@ void crearTurno() async{
       
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
-        DocumentReference ref2 = await db.collection('TurnosAcademico_Tokens').add({
-            'token': '$Token',
-            'email':  '$email'
-
-          });
+          DocumentReference ref2 = await db
+              .collection('TurnosAcademico_Tokens')
+              .add({'token': '$Token', 'email': '$email'});
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
+        });
+      } else {
+        _scaffoldState.currentState.showSnackBar(new SnackBar(
+          content: new Text(
+            'Ya creaste un turno, porfavor espera ser atendido',
+            style: new TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color(0xFFFF0000),
+        ));
+      }
+    });
 
-      });
+    //var data = db.collection('TurnosAcademico').where('email', isEqualTo: emailUsu ).snapshots();
 
-
-
-
-
-  /*DocumentReference ref = await db.collection('TurnoCaja').add({
+    /*DocumentReference ref = await db.collection('TurnoCaja').add({
             'Nombre': '$_nombre',
             'apellido': '$_apellido',
            
@@ -149,13 +140,11 @@ void crearTurno() async{
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       key: _scaffoldState,
+      key: _scaffoldState,
       appBar: AppBar(
         title: Text("Area Academica"),
       ),
@@ -203,7 +192,6 @@ class TurnosCajaList extends StatelessWidget {
                                     fontSize: 25.0,
                                     fontWeight: FontWeight.w800),
                                 textAlign: TextAlign.right),
-                          
                             new Text('Nombre: ${document['Nombre']}',
                                 style: TextStyle(
                                     fontSize: 20.0,
@@ -213,7 +201,7 @@ class TurnosCajaList extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.right),    
+                                textAlign: TextAlign.right),
                           ],
                         )
                       ],

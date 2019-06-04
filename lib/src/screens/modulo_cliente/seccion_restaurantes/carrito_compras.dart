@@ -58,10 +58,10 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
         //var pedidoMap =resultado[0];
         List pedidoUsuario = resultado;
         print(pedidoUsuario);
-        //Map dato ;
-        //dato = resultado[0];
-        //print(dato);
-        //print(dato['totalPrecioProducto']);
+        Map dato ;
+        dato = resultado[0];
+        print(dato);
+        print(dato['totalPrecioProducto']);
         String emailUsuario = email;
         String nombreUsuario = Nombre;
         String apellidoUsuario = Apellido;
@@ -82,7 +82,6 @@ class _CarritoComprasPageState extends State<CarritoComprasPage> {
               'nombreUsuario': '$nombreUsuario',
               'apellidoUsuario': '$apellidoUsuario',
               'pedidoAtendido': '$pedidoAtendido',
-              'turnoPedido': 1
               
             },
             merge: true);
