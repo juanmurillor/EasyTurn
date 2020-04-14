@@ -67,11 +67,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void validateAndSubmit() async {
-    FirebaseUser user =await FirebaseAuth.instance.currentUser();
     if (validateAndSave()) {
      
       try {
         if (_formType == FormType.login) {
+          FirebaseUser user =await FirebaseAuth.instance.currentUser();
           String userId =
               await widget.auth.signInWithEmailAndPassword(_email, _password);
               if(user.isEmailVerified){       
@@ -129,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
 		   'email':	_email,
 		   'nombre': _nombre,
 		   'telefono': _telefono,
-		   'idtipousuario_Tipousuario': tipousuarioid
        };
        var Body = json.encode(data);
        var response = await http.post(Uri.parse(url),body: Body,headers:{
@@ -151,7 +150,6 @@ class _LoginPageState extends State<LoginPage> {
             'telefono': '$_telefono',
             'email': '$_email',
             'contraseña': '$_password',
-            'tipoUsuario': '$_tipodeusuarios'
           });
           setState(() => id = ref.documentID);
           print(ref.documentID);
@@ -166,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
       } catch (e) {
         _scaffoldState.currentState.showSnackBar(new SnackBar(
           content: new Text(
-            e.message,
+            e.message.toString(),
             style: new TextStyle(color: Colors.white),
           ),
           backgroundColor: Color(0xFFC91301),
@@ -195,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
     return new Scaffold(
         key: _scaffoldState,
         appBar: new AppBar(
-          title: new Text('Easy Turn',style: new TextStyle(
+          title: new Text('USB App',style: new TextStyle(
             fontFamily: 'FugazOne',
             fontSize: 30,
             
@@ -205,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: new ListView(padding: EdgeInsets.all(16.0), children: <Widget>[
           new Image.asset(
-            'assets/images/et-logo1.png',
+            'assets/images/usbapp-logo1.png',
             fit: BoxFit.contain,
           ),
           new Form(
@@ -243,22 +241,7 @@ class _LoginPageState extends State<LoginPage> {
       ];
     } else {
       return [
-        new DropdownButton(
-          value: _tipodeusuarios,
-          items: _tipodeusuario.map((String tipodeusuarios) {
-            return new DropdownMenuItem(
-              value: tipodeusuarios,
-              child: new Row(
-                children: <Widget>[
-                  new Text('Tipo de Usuario: $tipodeusuarios')
-                ],
-              ),
-            );
-          }).toList(),
-          onChanged: (String tipodeusuarios) {
-            _onChanged(tipodeusuarios);
-          },
-        ),
+        
         new TextFormField(
           style: new TextStyle(
             fontFamily: 'Questrial'

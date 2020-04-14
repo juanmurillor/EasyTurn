@@ -1,6 +1,11 @@
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_academic.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_financiera.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_academicos.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_caja.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_financiera.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:flutter/material.dart';
 
 class MenuSeccAdministrativaPage extends StatefulWidget{
@@ -14,28 +19,67 @@ class MenuSeccAdministrativaPage extends StatefulWidget{
 }
 class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
 
-  void moveToMenuAreaCajasPage(){
+  void moveToMenuTurnosFinancieraPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuAreaCajasPage()),
+                MaterialPageRoute(builder: (context) => MenuTurnosFinancieraPage()),
               );
   }
-  void moveToMenuAreaFinancieraPage(){
+  void moveToMenuTurnosCajaPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuAreaFinancieraPage()),
+                MaterialPageRoute(builder: (context) => MenuTurnosCajaPage()),
               );
   }
-  void moveToMenuAreaAcademicaPage(){
+  void moveToMenuTurnosAcademicosPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuAreaAcademicaPage()),
+                MaterialPageRoute(builder: (context) => MenuTurnosAcademicosPage()),
               );
   }
 
 
 
   @override
+
+  Widget image_carousel = new Container(
+        height: 140.0,
+        child: CarouselSlider(
+          height: 140.0,
+          autoPlay: true,
+
+          items: [
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4'
+          ].map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(color: Colors.amber),
+                    child: GestureDetector(
+                        child: Image.network(i, fit: BoxFit.fill),
+                        onTap  : () async
+                          {
+                            const url = 'https://www.usbcali.edu.co/';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          
+                        },
+                        )
+                        );
+                        
+              },
+            );
+          }).toList(),
+        ));
+
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +135,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuAreaAcademicaPage,
+            onPressed: moveToMenuTurnosAcademicosPage,
             ),
           ), 
           Padding(
@@ -137,7 +181,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuAreaFinancieraPage,
+            onPressed: moveToMenuTurnosFinancieraPage,
              ),
             ),
              Padding(
@@ -183,13 +227,14 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuAreaCajasPage,
+            onPressed: moveToMenuTurnosCajaPage,
              ),
             )
           ],
       
           
       ),
+      bottomSheet: image_carousel,
     );
   }
 

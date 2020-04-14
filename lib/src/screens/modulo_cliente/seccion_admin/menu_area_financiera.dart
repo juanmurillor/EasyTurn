@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuAreaFinancieraPage extends StatefulWidget {
   MenuAreaFinancieraPage({this.auth, this.onSignedOut});
@@ -60,8 +62,8 @@ class _MenuAreaFinancieraPage extends State<MenuAreaFinancieraPage> {
             print(docs.documents[i].data);
           }
           print("este es el nombre " + resultado[0][3]);
-          Nombre = resultado[0][3];
-          Apellido = resultado[0][0];
+          Nombre = resultado[0][4];
+          Apellido = resultado[0][2];
 
           var batch = db.batch();
           var increment = FieldValue.increment(1);
@@ -154,6 +156,42 @@ class _MenuAreaFinancieraPage extends State<MenuAreaFinancieraPage> {
   }
 
   @override
+  
+    Widget image_carousel = new Container(
+        height: 200.0,
+        child: CarouselSlider(
+          height: 300.0,
+          autoPlay: true,
+
+          items: [
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannermicrositio50.jpg?itok=D-0pOzWQ',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerppal_mesa_de_trabajo_1_0.jpg?itok=uDic4wao',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannersolicitudcredito735x250-01.jpg?itok=nVHf_ylY',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerinscripciones2020-1.jpg?itok=gn9m88n0'
+          ].map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(color: Colors.amber),
+                    child: GestureDetector(
+                        child: Image.network(i, fit: BoxFit.fill),
+                        onTap: () {
+                          launchURL() async {
+                            const url = 'https://www.usbcali.edu.co/';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          }
+                        }));
+              },
+            );
+          }).toList(),
+        ));
+
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldState,
@@ -174,6 +212,7 @@ class _MenuAreaFinancieraPage extends State<MenuAreaFinancieraPage> {
         onPressed: crearTurno,
         isExtended: true,
       ),
+      bottomSheet: image_carousel,
     );
   }
 }

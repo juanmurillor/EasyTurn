@@ -25,6 +25,18 @@ dependencies:
   firebase_storage: ^3.0.0
   firebase_messaging: ^5.0.1+1
   shared_preferences: any
+  carousel_pro: ^1.0.0
+  carousel_slider: ^1.4.1
+  url_launcher: ^5.4.2
+  chewie: ^0.9.8+1
+  intl: ^0.16.1
+  flutter_datetime_picker: ^1.3.5
+  font_awesome_flutter: ^8.7.0
+
+
+ 
+
+
 
 
 
@@ -34,6 +46,8 @@ dependencies:
   image_picker: "^0.5.0"
   path_provider: "^0.5.0+1"
   image: "^2.0.7"
+  auto_size_text: ^2.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +55,13 @@ dev_dependencies:
 
   
   http: any
+
+  flutter_launcher_icons: ^0.7.4
+
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -51,6 +72,17 @@ flutter:
   assets:
     - assets/images/et-logo.png
     - assets/images/et-logo1.png
+    - assets/images/usbapp-logo.png
+    - assets/images/usbapp-logo1.png
+    - assets/carousel/b1.jpg
+    - assets/carousel/b2.jpg
+    - assets/carousel/b3.jpg
+    - assets/carousel/b4.jpg
+    - assets/carousel/b5.jpg
+    - assets/carousel/b6.jpg
+    - assets/carousel/b7.jpg
+    - assets/carousel/b8.jpg
+    - assets/videos/usb.mp4
 
 
   # The following line ensures that the Material Icons font is

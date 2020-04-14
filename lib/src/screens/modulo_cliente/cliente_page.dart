@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_restaurantes/menu_secc_restaurantes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:easy_turn/src/screens/login/buscar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_turn/src/screens/modulo_publicidad/menu_publicidad.dart';
+
 
 
 
@@ -41,8 +44,8 @@ class _ClientePageState extends State<ClientePage>{
         listaUsuarios.add(docs2.documents[i].data.values.toList());
         //print(docs.documents[i].data);
       }
-      Nombre = listaUsuarios[0][3];
-      Apellido = listaUsuarios[0][0];
+      Nombre = listaUsuarios[0][4];
+      Apellido = listaUsuarios[0][2];
     });
     }
   
@@ -69,10 +72,10 @@ class _ClientePageState extends State<ClientePage>{
     });
   }
 
- void moveToMenuSeccRestaurantesPage(){
+ void moveToMenuPublicidadPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuSeccRestaurantePage()),
+                MaterialPageRoute(builder: (context) => MenuPublicidadPage()),
               );
   }
   void moveToMenuSeccAdministrativaPage(){
@@ -93,21 +96,65 @@ void _signOut() async {
 
   }
 }
+ 
 
   
 
   @override
+  Widget image_carousel = new Container(
+        height: 140.0,
+        child: CarouselSlider(
+          height: 140.0,
+          autoPlay: true,
+
+          items: [
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4',
+            
+          ].map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(color: Colors.amber),
+                    child: GestureDetector(
+                        child: Image.network(i, fit: BoxFit.fill),
+                        onTap  : () async
+                          {
+                            const url = 'https://www.usbcali.edu.co/';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          
+                        },
+                        )
+                        );
+                        
+              },
+            );
+          }).toList(),
+        ));
+
+
   Widget build(BuildContext context) {
     userEmail();
     usuario();
 
     return Scaffold(
+
+      
+     
       appBar: AppBar(
-        title: Text("EasyTurn",style: new TextStyle(
+        title: Text("USB Turnos App",style: new TextStyle(
           fontFamily: 'FugazOne',
-          fontSize: 30
+          fontSize: 30,
+          color: Colors.orangeAccent
         ),),
         
+            
           
       ),
       drawer: new Drawer(
@@ -149,7 +196,7 @@ void _signOut() async {
       body: new  ListView(
         scrollDirection: Axis.vertical,
         children: <Widget>[
-          Padding(
+         /* Padding(
             padding: const EdgeInsets.all(16.0),
             child: FlatButton(
             child: Container(
@@ -166,14 +213,14 @@ void _signOut() async {
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Seccion de Restaurantes",
-                      style: new TextStyle(fontSize: 35.0, 
+                        "Ubicate en la USB",
+                      style: new TextStyle(fontSize: 40.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Questrial'
                       ),
                       ),
-                      onPressed: moveToMenuSeccRestaurantesPage,
+                      onPressed: moveToMenuSeccAdministrativaPage,
                       )
                     ),
                     Container(
@@ -184,7 +231,7 @@ void _signOut() async {
                         child: Image(
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/08/23/23/11/egg-1615790_960_720.jpg"),
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2013/07/13/14/05/location-162102_960_720.png"),
                         ),
                       ),
                     )
@@ -193,9 +240,9 @@ void _signOut() async {
               ),
             ),
             ),
-            onPressed: moveToMenuSeccRestaurantesPage,
+            
             ),
-          ), 
+          ), */
           Padding(
              padding: const EdgeInsets.all(16.0),
             child: new FlatButton( 
@@ -212,10 +259,10 @@ void _signOut() async {
                       width: 258,
                       child: new FlatButton(
                        child: new Text(
-                        "Seccion Administrativa",
-                      style: new TextStyle(fontSize: 35.0, 
+                        "Gestiona tu turno",
+                      style: new TextStyle(fontSize: 40.0, 
                       color: Colors.black,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Questrial'
                       ),
                       ),
@@ -230,7 +277,7 @@ void _signOut() async {
                         child: Image(
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2018/02/14/10/28/business-3152586_960_720.jpg"),
+                          image: NetworkImage("http://www.farestaie.com/webcheckin/img/solicitar-turno.png"),
                         ),
                       
                       ),
@@ -243,10 +290,57 @@ void _signOut() async {
             onPressed: moveToMenuSeccAdministrativaPage,
             ),
           ),
+          Padding(
+             padding: const EdgeInsets.all(16.0),
+            child: new FlatButton( 
+            child: Container(
+              child: FittedBox(
+              child: Material(
+               color: Colors.white ,
+               elevation: 14.0,
+               borderRadius: BorderRadius.circular(24.0),
+               shadowColor: Color(0x802196F3),
+               child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 258,
+                      child: new FlatButton(
+                       child: new Text(
+                        "Enterate sobre nosotros",
+                      style: new TextStyle(fontSize: 40.0, 
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Questrial'
+                      ),
+                      ),
+                      ),
+                    ),
+                    Container(
+                      width: 300,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(24.0),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          image: NetworkImage("https://elclavo.com/wp-content/uploads/2015/06/Universidaddesan-buenaventura20130927.jpg"),
+                        ),
+                      
+                      ),
+                    )
+                  ],
+               ),
+              ),
+            ),
+            ),
+            ),
+          ),
           ],
       
           
       ),
+      bottomSheet: image_carousel,
+      
     );
   }
 }

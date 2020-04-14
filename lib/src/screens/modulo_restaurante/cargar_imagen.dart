@@ -23,7 +23,7 @@ class CargarImagenPage extends StatefulWidget {
     Future _getImage() async {
       var selectedImage = await  ImagePicker.pickImage(source: ImageSource.gallery);
       Img.Image _image = Img.decodeImage(selectedImage.readAsBytesSync());
-      Img.Image smallerImg = Img.copyResize(_image, 200);
+      Img.Image smallerImg = Img.copyResize(_image);
       setState(() {
        image = selectedImage;
        filename = basename(image.path); 
@@ -32,7 +32,7 @@ class CargarImagenPage extends StatefulWidget {
       Future _getImageCamera() async {
       var selectedImage = await  ImagePicker.pickImage(source: ImageSource.camera);
       Img.Image _image = Img.decodeImage(selectedImage.readAsBytesSync());
-      Img.Image smallerImg = Img.copyResize(_image, 200);
+      Img.Image smallerImg = Img.copyResize(_image);
       setState(() {
        image = selectedImage;
        filename = basename(image.path); 

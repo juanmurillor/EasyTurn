@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'src/screens/login/auth.dart';
 import 'src/screens/login/login_page.dart';
-import 'src/screens/modulo_administrativa/administrativo_page.dart';
 import 'src/screens/modulo_cliente/cliente_page.dart';
 import 'src/screens/modulo_restaurante/restaurante_page.dart';
 
