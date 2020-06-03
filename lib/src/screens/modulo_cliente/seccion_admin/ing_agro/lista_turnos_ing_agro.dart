@@ -8,15 +8,15 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ListaTurnosAcademicosPage extends StatefulWidget {
-  ListaTurnosAcademicosPage({this.auth, this.onSignedOut});
+class ListaTurnosIngAgroPage extends StatefulWidget {
+  ListaTurnosIngAgroPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   @override
-  State<StatefulWidget> createState() => new _ListaTurnosAcademicosPage();
+  State<StatefulWidget> createState() => new _ListaTurnosIngAgroPage();
 }
 
-class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
+class _ListaTurnosIngAgroPage extends State<ListaTurnosIngAgroPage> {
   final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
@@ -61,8 +61,8 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
             print(docs.documents[i].data);
           }
           print("este es el nombre " + resultado[0][3]);
-          Nombre = resultado[0][4];
-          Apellido = resultado[0][2];
+          Nombre = resultado[0][3];
+          Apellido = resultado[0][1];
 
           var batch = db.batch();
           var increment = FieldValue.increment(1);
@@ -203,7 +203,7 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
     return Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
-        title: Text("Turnos Ing Sistemas",style: new TextStyle(
+        title: Text("Turnos Ing Agroindustrial",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -211,7 +211,6 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
       body:             
       new TurnosCajaList(),
      
-      
     );
   }
 }
@@ -226,7 +225,7 @@ class TurnosCajaList extends StatelessWidget {
   Widget build(BuildContext context) {
             return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
-          .collection('TurnosIngSistemas')
+          .collection('TurnosIngAgro')
           .orderBy(
             "Turno",
           )

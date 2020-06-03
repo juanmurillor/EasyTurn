@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+
 const admin  = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
@@ -39,6 +40,77 @@ exports.notificationTriggerDelete_Turnos_Caja = functions.firestore.document(
         }
     })
 })
+exports.notificationTriggerDelete_Turnos_IngAgro = functions.firestore.document(
+    'TurnosIngAgro/{TurnosIngAgroId}'
+).onDelete((snapshot,context)=>{
+    msgData = snapshot.data();
+
+    admin.firestore().collection('TurnosIngAgro_Tokens').get().then((snapshots)=>{
+        var tokens = [];
+        if (snapshots.empty) {
+            console.log('No se encunetran Dispositivos');
+        }
+        else{
+            for(var token of snapshots.docs){
+                tokens.push(token.data().token);
+            }
+
+            var payload = {
+                "notification":{
+                    "title": "Ingenieria Agroindustrial - Siguiente Turno",
+                    "body": "Acabo de Terminar el Turno #: " + msgData.Turno,
+                    "sound": "default"
+                },
+                "data":{
+                    "sendername": toString(msgData.Turno),
+                    "message": msgData.Nombre
+                }
+            }
+            return admin.messaging().sendToDevice(tokens, payload).then((response)=>{
+                console.log('Pushed them all');
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    })
+})
+
+exports.notificationTriggerDelete_Turnos_IngMultimedia = functions.firestore.document(
+    'TurnosIngMultimedia/{TurnosIngMultimediaId}'
+).onDelete((snapshot,context)=>{
+    msgData = snapshot.data();
+
+    admin.firestore().collection('TurnosIngMultimedia_Tokens').get().then((snapshots)=>{
+        var tokens = [];
+        if (snapshots.empty) {
+            console.log('No se encunetran Dispositivos');
+        }
+        else{
+            for(var token of snapshots.docs){
+                tokens.push(token.data().token);
+            }
+
+            var payload = {
+                "notification":{
+                    "title": "Ingenieria Multimedia - Siguiente Turno",
+                    "body": "Acabo de Terminar el Turno #: " + msgData.Turno,
+                    "sound": "default"
+                },
+                "data":{
+                    "sendername": toString(msgData.Turno),
+                    "message": msgData.Nombre
+                }
+            }
+            return admin.messaging().sendToDevice(tokens, payload).then((response)=>{
+                console.log('Pushed them all');
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    })
+})
+
+
 
 exports.notificationTriggerCreate_Turnos_Caja = functions.firestore.document(
     'TurnosCaja/{turnoCajaId}'
@@ -74,6 +146,8 @@ exports.notificationTriggerCreate_Turnos_Caja = functions.firestore.document(
         }
     })
 })
+
+
 // TURNOS ACADEMICO
 exports.notificationTriggerDelete_Turnos_Academico = functions.firestore.document(
     'TurnosAcademico/{turnoAcademicoId}'

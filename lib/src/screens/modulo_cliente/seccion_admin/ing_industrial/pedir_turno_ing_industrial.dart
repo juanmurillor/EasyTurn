@@ -1,3 +1,6 @@
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_academic.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/calificacion_turnoReg_academico.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,16 +10,23 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
-class ListaTurnosAcademicosPage extends StatefulWidget {
-  ListaTurnosAcademicosPage({this.auth, this.onSignedOut});
+
+class PedirTurnoIngIndustrialPage extends StatefulWidget{
+
+  PedirTurnoIngIndustrialPage({this.auth, this.onSignedOut});
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   @override
-  State<StatefulWidget> createState() => new _ListaTurnosAcademicosPage();
-}
 
-class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
+  
+    State<StatefulWidget> createState () => new _PedirTurnoIngIndustrialPage();
+   
+
+}
+class _PedirTurnoIngIndustrialPage extends State<PedirTurnoIngIndustrialPage>{
+
   final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
@@ -31,7 +41,7 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
 
     getTurno(String emailsito) {
       return db
-          .collection('TurnosAcademico')
+          .collection('TurnosIngIndustrial')
           .where('email', isEqualTo: emailUsu)
           .getDocuments();
     }
@@ -53,6 +63,7 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
         Buscar().buscarusuario(user.email).then((QuerySnapshot docs) async {
           String Nombre;
           String Apellido;
+          var telefono;
           String email;
           email = user.email;
 
@@ -61,34 +72,44 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
             print(docs.documents[i].data);
           }
           print("este es el nombre " + resultado[0][3]);
-          Nombre = resultado[0][4];
-          Apellido = resultado[0][2];
+          Nombre = resultado[0][2];
+          Apellido = resultado[0][1];
+          telefono = resultado[0][3];
+          DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+          String fechaHora = dateFormat.format(DateTime.now());
+
+
 
           var batch = db.batch();
           var increment = FieldValue.increment(1);
           var rng = new Random();
           var lol = new List.generate(12, (_) => rng.nextInt(100));
 
-          var refe2 = db.collection('TurnosAcademico').document('--turnos--');
+          var refe2 = db.collection('TurnosIngIndustrial').document('--turnos--');
           batch.setData(
               refe2,
               {
                 'TurnoIncremental': increment,
               },
               merge: true);
+       
+              
 
-          var document =
-              await Firestore.instance.document('TurnosAcademico/--turnos--');
+          var document =await Firestore.instance.document('TurnosIngIndustrial/--turnos--');
           DocumentSnapshot snapshot = await db
-              .collection('TurnosAcademico')
+              .collection('TurnosIngIndustrial')
               .document('--turnos--')
               .get();
           print(snapshot.data['TurnoIncremental']);
 
           int Turno = snapshot.data['TurnoIncremental'];
 
-          var refe = db.collection('TurnosAcademico').document('$lol');
+          var refe = db.collection('TurnosIngIndustrial').document('$lol');
+          var refeEstadistica = db.collection('TurnosIngIndustrial_Estadistica').document('$lol');
+
           print(lol);
+          print("esta es la fecha " + fechaHora);
+
 
           batch.setData(
               refe,
@@ -97,6 +118,20 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
                 'Apellido': '$Apellido',
                 'email': '$email',
                 'Turno': Turno,
+                'telefono': telefono,
+                'FechaHora': '$fechaHora',
+              },
+              merge: true);
+
+            batch.setData(
+              refeEstadistica,
+              {
+                'Nombre': '$Nombre',
+                'Apellido': '$Apellido',
+                'email': '$email',
+                'Turno': Turno,
+                'telefono': telefono,
+                'FechaHora': '$fechaHora',
               },
               merge: true);
           batch.commit();
@@ -116,7 +151,7 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
           DocumentReference ref2 = await db
-              .collection('TurnosAcademico_Tokens')
+              .collection('TurnosIngIndustrial_Tokens')
               .add({'token': '$Token', 'email': '$email'});
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
@@ -127,7 +162,7 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
             style: new TextStyle(
               color: Colors.white,
               fontFamily: 'Questrial',
-              fontSize: 15,
+              fontSize: 20,
               fontWeight: FontWeight.w600
               ),
           ),
@@ -135,19 +170,34 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
         ));
 
         });
+
+        /* Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CaliTurnoRegAcademicoPage()),
+              );*/
+
       } else {
         _scaffoldState.currentState.showSnackBar(new SnackBar(
           content: new Text(
-            'Ya creaste un turno, porfavor espera ser atendido',
+            'Ya creaste un turno, Por favor espera ser atendido',
             style: new TextStyle(color: Colors.white,
             fontFamily: 'Questrial',
-              fontSize: 15,
+              fontSize: 20,
               fontWeight: FontWeight.w600),
           ),
           backgroundColor: Color(0xFFFF0000),
         ));
       }
     });
+
+   
+   
+  
+
+   
+
+
+
 
     //var data = db.collection('TurnosAcademico').where('email', isEqualTo: emailUsu ).snapshots();
 
@@ -159,16 +209,22 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
   }
+   
+
+
+
+  
+
 
   @override
+
   Widget image_carousel = new Container(
-        height: 70.0,
+        height: 140.0,
         child: CarouselSlider(
-          height: 70.0,
-          autoPlay: true,
+          
 
           items: [
-           'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
+            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4'
           ].map((i) {
             return Builder(
@@ -197,110 +253,88 @@ class _ListaTurnosAcademicosPage extends State<ListaTurnosAcademicosPage> {
           }).toList(),
         ));
 
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldState,
-      appBar: AppBar(
-        title: Text("Turnos Ing Sistemas",style: new TextStyle(
-          fontFamily: 'FugazOne',
-          fontSize: 23
-        ),),
-      ),
-      body:             
-      new TurnosCajaList(),
-     
-      
-    );
-  }
-}
-
-class TurnosCajaList extends StatelessWidget {
-
-
-
-
-  
-  @override
-  Widget build(BuildContext context) {
-            return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
-          .collection('TurnosIngSistemas')
-          .orderBy(
-            "Turno",
-          )
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-        if (snapshot.data == null ) return 
-        new Text('   \n  No hay turnos en espera actualmente',
-        style: TextStyle(
-                                    fontSize: 25.0,
+     body: Center(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              title: Text('Pedir Turno',style: TextStyle(
+                color:Colors.white,fontSize: 25.0,
                                     fontFamily: 'Questrial',
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center);
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return new Text('Loading...');
-          default:
-            return new ListView(
-              children:
-                  snapshot.data.documents.map((DocumentSnapshot document) {
-                return new Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Text('Turno: ${document['Turno']}',
-                                style: TextStyle(
-                                    fontSize: 50.0,
-                                    fontFamily: 'Questrial',
-                                    fontWeight: FontWeight.w700),
-                                textAlign: TextAlign.right),
-                          ]),
-                          new Row(
-                            children: <Widget>[
-                              new Text("     ")
-                            ],
-                          ),
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Text('Nombre: ${document['Nombre']}',
-                                style: TextStyle(
-                                    fontSize: 30.0,
-                                    fontFamily: 'Questrial',
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.right),
-                            
-                          ],
-                        ),
-                        new Row(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Text('Apellido: ${document['Apellido']}',
-                                style: TextStyle(
-                                    fontSize: 30.0,
-                                    fontFamily: 'Questrial',
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.right),
-
-                          ]
-                        )
-                      ],
+                                    fontWeight: FontWeight.w500),),
+              
+              backgroundColor: Colors.blue,
+              expandedHeight: 350.0,
+              flexibleSpace: FlexibleSpaceBar(
+              background: Image.network("https://i.ya-webdesign.com/images/movies-vector-cinema-ticket-3.png")
+                
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+         
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FlatButton(
+            child: Container(
+              child: FittedBox(
+              child: Material(
+               color: Colors.white ,
+               elevation: 14.0,
+               borderRadius: BorderRadius.circular(24.0),
+               shadowColor: Color(0x802196F3),
+               child: Row(
+                 
+                  children: <Widget>[
+                    Container(
+                      width: 250,
+                      child: new FlatButton(
+                      child: new Text(
+                        "Presiona para pedir un turno",
+                     style: new TextStyle(fontSize: 35.0, 
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                       fontFamily: 'Questrial'
+                      ),
+                      ),
+                      onPressed: crearTurno,
+                      )
                     ),
-                  ),
-                );
-              }).toList(),
-            );
-        }
-      },
+                    Container(
+                      width: 300,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(24.0),
+                        child: Image(
+                           
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topRight,
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2012/04/16/11/51/printer-35651_960_720.png"),
+                        ),
+                      ),
+                    )
+                  ],
+               ),
+              ),
+            ),
+            ),
+            onPressed: crearTurno
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: image_carousel,
+          ) 
+        
+              ]),
+              ),
+          ],
+        )
+     ),     
     );
   }
+
+    
 }

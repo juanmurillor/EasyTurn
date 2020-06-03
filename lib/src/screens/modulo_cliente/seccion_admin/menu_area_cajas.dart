@@ -154,7 +154,7 @@ class _MenuAreaCajasPage extends State<MenuAreaCajasPage> {
    Widget image_carousel = new Container(
         height: 200.0,
         child: CarouselSlider(
-          height: 300.0,
+         height: 300.0,
           autoPlay: true,
 
           items: [

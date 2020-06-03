@@ -13,7 +13,8 @@ class _PublicidadCarouselState extends State<PublicidadCarousel> {
     Widget image_carousel = new Container(
         height: 200.0,
         child: CarouselSlider(
-          height: 200.0,
+                    height: 200.0,
+
           items: [
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannermicrositio50.jpg?itok=D-0pOzWQ',
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerppal_mesa_de_trabajo_1_0.jpg?itok=uDic4wao',

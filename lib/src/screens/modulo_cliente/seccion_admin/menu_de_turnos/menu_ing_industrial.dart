@@ -5,26 +5,28 @@ import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academ
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/reservar_turno_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/lista_turnos_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/mis_turnos_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_industrial/pedir_turno_ing_industrial.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_industrial/lista_turnos_ing_industrial.dart';
 
 
 
 import 'package:flutter/material.dart';
 
-class MenuTurnosAcademicosPage extends StatefulWidget{
+class MenuIngIndustrialPage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState () => new _MenuTurnosAcademicosPage();
+    State<StatefulWidget> createState () => new _MenuIngIndustrialPage();
 
 
    
 
 }
-class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
+class _MenuIngIndustrialPage extends State<MenuIngIndustrialPage>{
 
-  void moveToPedirTurnoAcademicoPage(){
+  void moveToPedirTurnoIngIndustrialPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PedirTurnoAcademicoPage()),
+                MaterialPageRoute(builder: (context) => PedirTurnoIngIndustrialPage()),
               );
   }
   void moveToReservarTurnoTurnoAcademicoPage(){
@@ -33,10 +35,10 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
                 MaterialPageRoute(builder: (context) => ReservarTurnoTurnoAcademicoPage()),
               );
   }
-  void moveToListaTurnosAcademicosPage(){
+  void moveToListaTurnosIngIndustrialPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListaTurnosAcademicosPage()),
+                MaterialPageRoute(builder: (context) => ListaTurnosIngIndustrialPage()),
               );
   }
 
@@ -53,7 +55,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ingenieria de Sistemas",style: new TextStyle(
+        title: Text("Ingenieria Industrial",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -105,7 +107,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToPedirTurnoAcademicoPage,
+            onPressed: moveToPedirTurnoIngIndustrialPage,
             ),
           ), 
           /*Padding(
@@ -197,7 +199,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToListaTurnosAcademicosPage
+            onPressed: moveToListaTurnosIngIndustrialPage
              ),
             ),
             /* Padding(

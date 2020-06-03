@@ -161,8 +161,7 @@ class _MenuAreaFinancieraPage extends State<MenuAreaFinancieraPage> {
         height: 200.0,
         child: CarouselSlider(
           height: 300.0,
-          autoPlay: true,
-
+          autoPlay: true,         
           items: [
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannermicrositio50.jpg?itok=D-0pOzWQ',
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerppal_mesa_de_trabajo_1_0.jpg?itok=uDic4wao',

@@ -19,19 +19,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.0+1
+  firebase_core: ^0.4.4+3
   firebase_auth: ^0.11.0
-  cloud_firestore: ^0.11.0+1
-  firebase_storage: ^3.0.0
-  firebase_messaging: ^5.0.1+1
+  cloud_firestore: ^0.13.5
+  firebase_storage: ^3.1.5
+  firebase_messaging: ^6.0.13
   shared_preferences: any
   carousel_pro: ^1.0.0
   carousel_slider: ^1.4.1
   url_launcher: ^5.4.2
-  chewie: ^0.9.8+1
+  chewie: ^0.9.10
   intl: ^0.16.1
   flutter_datetime_picker: ^1.3.5
-  font_awesome_flutter: ^8.7.0
+  font_awesome_flutter: ^8.8.1
 
 
  
@@ -61,7 +61,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon" 
   ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: "assets/icon/icon1.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -74,16 +74,7 @@ flutter:
     - assets/images/et-logo1.png
     - assets/images/usbapp-logo.png
     - assets/images/usbapp-logo1.png
-    - assets/carousel/b1.jpg
-    - assets/carousel/b2.jpg
-    - assets/carousel/b3.jpg
-    - assets/carousel/b4.jpg
-    - assets/carousel/b5.jpg
-    - assets/carousel/b6.jpg
-    - assets/carousel/b7.jpg
-    - assets/carousel/b8.jpg
-    - assets/videos/usb.mp4
-
+    
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -112,8 +103,8 @@ flutter:
         - asset: fonts/Questrial-Regular.ttf
     - family: FugazOne
       fonts:
-         - asset: fonts/FugazOne-Regular.ttf
-         - weight: 700
+        - asset: fonts/FugazOne-Regular.ttf
+        - weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

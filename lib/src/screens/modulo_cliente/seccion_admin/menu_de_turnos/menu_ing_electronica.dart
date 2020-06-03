@@ -5,26 +5,28 @@ import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academ
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/reservar_turno_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/lista_turnos_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/mis_turnos_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_electronica/pedir_turno_ing_electronica.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_electronica/lista_turnos_ing_electronica.dart';
 
 
 
 import 'package:flutter/material.dart';
 
-class MenuTurnosAcademicosPage extends StatefulWidget{
+class MenuIngElectronicaPage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState () => new _MenuTurnosAcademicosPage();
+    State<StatefulWidget> createState () => new _MenuIngElectronicaPage();
 
 
    
 
 }
-class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
+class _MenuIngElectronicaPage extends State<MenuIngElectronicaPage>{
 
-  void moveToPedirTurnoAcademicoPage(){
+  void moveToPedirTurnoIngElectronicaPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PedirTurnoAcademicoPage()),
+                MaterialPageRoute(builder: (context) => PedirTurnoIngElectronicaPage()),
               );
   }
   void moveToReservarTurnoTurnoAcademicoPage(){
@@ -33,10 +35,10 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
                 MaterialPageRoute(builder: (context) => ReservarTurnoTurnoAcademicoPage()),
               );
   }
-  void moveToListaTurnosAcademicosPage(){
+  void moveToListaTurnosIngElectronicaPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListaTurnosAcademicosPage()),
+                MaterialPageRoute(builder: (context) => ListaTurnosIngElectronicaPage()),
               );
   }
 
@@ -53,7 +55,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ingenieria de Sistemas",style: new TextStyle(
+        title: Text("Ingenieria Electronica",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -105,7 +107,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToPedirTurnoAcademicoPage,
+            onPressed: moveToPedirTurnoIngElectronicaPage,
             ),
           ), 
           /*Padding(
@@ -197,7 +199,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToListaTurnosAcademicosPage
+            onPressed: moveToListaTurnosIngElectronicaPage
              ),
             ),
             /* Padding(

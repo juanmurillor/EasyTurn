@@ -41,7 +41,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
 
     getTurno(String emailsito) {
       return db
-          .collection('TurnosAcademico')
+          .collection('TurnosIngSistemas')
           .where('email', isEqualTo: emailUsu)
           .getDocuments();
     }
@@ -72,8 +72,8 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
             print(docs.documents[i].data);
           }
           print("este es el nombre " + resultado[0][3]);
-          Nombre = resultado[0][4];
-          Apellido = resultado[0][2];
+          Nombre = resultado[0][2];
+          Apellido = resultado[0][1];
           telefono = resultado[0][3];
           DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
           String fechaHora = dateFormat.format(DateTime.now());
@@ -85,7 +85,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
           var rng = new Random();
           var lol = new List.generate(12, (_) => rng.nextInt(100));
 
-          var refe2 = db.collection('TurnosAcademico').document('--turnos--');
+          var refe2 = db.collection('TurnosIngSistemas').document('--turnos--');
           batch.setData(
               refe2,
               {
@@ -95,17 +95,17 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
        
               
 
-          var document =await Firestore.instance.document('TurnosAcademico/--turnos--');
+          var document =await Firestore.instance.document('TurnosIngSistemas/--turnos--');
           DocumentSnapshot snapshot = await db
-              .collection('TurnosAcademico')
+              .collection('TurnosIngSistemas')
               .document('--turnos--')
               .get();
           print(snapshot.data['TurnoIncremental']);
 
           int Turno = snapshot.data['TurnoIncremental'];
 
-          var refe = db.collection('TurnosAcademico').document('$lol');
-          var refeEstadistica = db.collection('TurnosAcademicoEstadistica').document('$lol');
+          var refe = db.collection('TurnosIngSistemas').document('$lol');
+          var refeEstadistica = db.collection('TurnosIngSistemasEstadistica').document('$lol');
 
           print(lol);
           print("esta es la fecha " + fechaHora);
@@ -130,6 +130,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
                 'Apellido': '$Apellido',
                 'email': '$email',
                 'Turno': Turno,
+                'telefono': telefono,
                 'FechaHora': '$fechaHora',
               },
               merge: true);
@@ -150,7 +151,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
           DocumentReference ref2 = await db
-              .collection('TurnosAcademico_Tokens')
+              .collection('TurnosIngSistemas_Tokens')
               .add({'token': '$Token', 'email': '$email'});
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
@@ -170,10 +171,10 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
 
         });
 
-         Navigator.push(
+        /* Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CaliTurnoRegAcademicoPage()),
-              );
+              );*/
 
       } else {
         _scaffoldState.currentState.showSnackBar(new SnackBar(
@@ -220,8 +221,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
   Widget image_carousel = new Container(
         height: 140.0,
         child: CarouselSlider(
-          height: 140.0,
-          autoPlay: true,
+          
 
           items: [
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
@@ -292,7 +292,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Pide un turno",
+                        "Presiona para pedir un turno",
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,

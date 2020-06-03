@@ -59,8 +59,8 @@ class _MisTurnosAcademicoPageState extends State<MisTurnosAcademicoPage> {
         listaTurnosRegularAca.add(docs2.documents[i].data.values.toList());
         print(docs2.documents[i].data);
         NombreTurnoRegurlarAca = listaTurnosRegularAca[0][0];
-        ApellidoTurnoRegurlarAca = listaTurnosRegularAca[0][1];
-        TurnoRegurlarAca = listaTurnosRegularAca[0][3];
+        ApellidoTurnoRegurlarAca = listaTurnosRegularAca[0][3];
+        TurnoRegurlarAca = listaTurnosRegularAca[0][2];
       }
       
     });

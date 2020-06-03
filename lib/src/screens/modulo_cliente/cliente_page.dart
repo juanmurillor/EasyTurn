@@ -44,8 +44,8 @@ class _ClientePageState extends State<ClientePage>{
         listaUsuarios.add(docs2.documents[i].data.values.toList());
         //print(docs.documents[i].data);
       }
-      Nombre = listaUsuarios[0][4];
-      Apellido = listaUsuarios[0][2];
+      Nombre = listaUsuarios[0][2];
+      Apellido = listaUsuarios[0][1];
     });
     }
   
@@ -106,7 +106,7 @@ void _signOut() async {
         child: CarouselSlider(
           height: 140.0,
           autoPlay: true,
-
+          
           items: [
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
             'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4',
@@ -148,7 +148,7 @@ void _signOut() async {
       
      
       appBar: AppBar(
-        title: Text("USB Turnos App",style: new TextStyle(
+        title: Text("USB App",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 30,
           color: Colors.orangeAccent

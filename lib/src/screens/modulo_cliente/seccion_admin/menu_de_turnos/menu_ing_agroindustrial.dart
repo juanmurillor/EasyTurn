@@ -4,27 +4,29 @@ import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_fin
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/pedir_turno_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/reservar_turno_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/lista_turnos_academico.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/mis_turnos_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_agro/lista_turnos_ing_agro.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/ing_agro/pedir_turno_ing_agro.dart';
+
 
 
 
 import 'package:flutter/material.dart';
 
-class MenuTurnosAcademicosPage extends StatefulWidget{
+class MenuIngAgroPage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState () => new _MenuTurnosAcademicosPage();
+    State<StatefulWidget> createState () => new _MenuIngAgroPage();
 
 
    
 
 }
-class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
+class _MenuIngAgroPage extends State<MenuIngAgroPage>{
 
-  void moveToPedirTurnoAcademicoPage(){
+  void moveToPedirTurnoIngAgroPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PedirTurnoAcademicoPage()),
+                MaterialPageRoute(builder: (context) => PedirTurnoIngAgroPage()),
               );
   }
   void moveToReservarTurnoTurnoAcademicoPage(){
@@ -33,27 +35,21 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
                 MaterialPageRoute(builder: (context) => ReservarTurnoTurnoAcademicoPage()),
               );
   }
-  void moveToListaTurnosAcademicosPage(){
+  void moveToListaTurnosIngAgroPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListaTurnosAcademicosPage()),
+                MaterialPageRoute(builder: (context) => ListaTurnosIngAgroPage()),
               );
   }
 
-  void moveToMisTurnosAcademicoPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MisTurnosAcademicoPage()),
-              );
-  }
-
+  
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ingenieria de Sistemas",style: new TextStyle(
+        title: Text("Ingenieria Agroindustrial",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -105,7 +101,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToPedirTurnoAcademicoPage,
+            onPressed: moveToPedirTurnoIngAgroPage,
             ),
           ), 
           /*Padding(
@@ -197,7 +193,7 @@ class _MenuTurnosAcademicosPage extends State<MenuTurnosAcademicosPage>{
               ),
             ),
             ),
-            onPressed: moveToListaTurnosAcademicosPage
+            onPressed: moveToListaTurnosIngAgroPage
              ),
             ),
             /* Padding(
