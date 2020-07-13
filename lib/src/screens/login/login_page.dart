@@ -77,17 +77,18 @@ class _LoginPageState extends State<LoginPage> {
               if(user.isEmailVerified){       
           print('sesion iniciada por: $userId');
           var resultado = [];
+           widget.onSignedInAsCliente();    
+
+          
+  
           Buscar().buscarusuario(_email).then((QuerySnapshot docs) {
             for (int i = 0; i < docs.documents.length; i++) {
               resultado.add(docs.documents[i].data.values.toList());
-              //print(docs.documents[i].data);
+              print(docs.documents[i].data);
             }
-            print(resultado[0][1]);
+            print(resultado[0][3]);
            
-            if (resultado[0][1] == "Cliente") {
-              print('Bienvenido Usuario Cliente');
-              widget.onSignedInAsCliente();             
-            }
+            
           });}else 
           _scaffoldState.currentState.showSnackBar(new SnackBar(
             content: new Text(

@@ -32,6 +32,7 @@ dependencies:
   intl: ^0.16.1
   flutter_datetime_picker: ^1.3.5
   font_awesome_flutter: ^8.7.0
+  provider: ^3.1.0
 
 
  
@@ -74,15 +75,7 @@ flutter:
     - assets/images/et-logo1.png
     - assets/images/usbapp-logo.png
     - assets/images/usbapp-logo1.png
-    - assets/carousel/b1.jpg
-    - assets/carousel/b2.jpg
-    - assets/carousel/b3.jpg
-    - assets/carousel/b4.jpg
-    - assets/carousel/b5.jpg
-    - assets/carousel/b6.jpg
-    - assets/carousel/b7.jpg
-    - assets/carousel/b8.jpg
-    - assets/videos/usb.mp4
+    
 
 
   # The following line ensures that the Material Icons font is

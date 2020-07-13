@@ -13,35 +13,45 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 
-class PedirTurnoAcademicoPage extends StatefulWidget{
+class PedirTurnoProfesoresPage extends StatefulWidget{
 
-  PedirTurnoAcademicoPage({this.auth, this.onSignedOut});
+  PedirTurnoProfesoresPage(this.list,{this.auth, this.onSignedOut});
   final BaseAuth auth;
   final VoidCallback onSignedOut;
+  final DocumentSnapshot list;
+
   @override
 
   
-    State<StatefulWidget> createState () => new _PedirTurnoAcademicoPage();
+    State<StatefulWidget> createState () => new _PedirTurnoProfesoresPage();
    
 
 }
-class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
+class _PedirTurnoProfesoresPage extends State<PedirTurnoProfesoresPage>{
 
   final GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
   final db = Firestore.instance;
+  static String nombreProfesor = "" ;
+
 
   String id;
+
+  void cargarProfesor()async{
+    nombreProfesor = "${widget.list["Nombre"]}${widget.list["Apellido"]}";
+    print(nombreProfesor);
+  }
 
   void crearTurno() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     String emailUsu = user.email;
+    print(nombreProfesor);
     print(emailUsu);
 
     getTurno(String emailsito) {
       return db
-          .collection('TurnosAcademico')
+          .collection(nombreProfesor)
           .where('email', isEqualTo: emailUsu)
           .getDocuments();
     }
@@ -85,7 +95,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
           var rng = new Random();
           var lol = new List.generate(12, (_) => rng.nextInt(100));
 
-          var refe2 = db.collection('TurnosAcademico').document('--turnos--');
+          var refe2 = db.collection(nombreProfesor).document('--turnos--');
           batch.setData(
               refe2,
               {
@@ -95,17 +105,17 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
        
               
 
-          var document =await Firestore.instance.document('TurnosAcademico/--turnos--');
+          var document =await Firestore.instance.document('$nombreProfesor/--turnos--');
           DocumentSnapshot snapshot = await db
-              .collection('TurnosAcademico')
+              .collection(nombreProfesor)
               .document('--turnos--')
               .get();
           print(snapshot.data['TurnoIncremental']);
 
           int Turno = snapshot.data['TurnoIncremental'];
 
-          var refe = db.collection('TurnosAcademico').document('$lol');
-          var refeEstadistica = db.collection('TurnosAcademicoEstadistica').document('$lol');
+          var refe = db.collection(nombreProfesor).document('$lol');
+          ///var refeEstadistica = db.collection('TurnosAcademicoEstadistica').document('$lol');
 
           print(lol);
           print("esta es la fecha " + fechaHora);
@@ -123,7 +133,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
               },
               merge: true);
 
-            batch.setData(
+           /* batch.setData(
               refeEstadistica,
               {
                 'Nombre': '$Nombre',
@@ -132,7 +142,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
                 'Turno': Turno,
                 'FechaHora': '$fechaHora',
               },
-              merge: true);
+              merge: true);*/
           batch.commit();
 
           /*DocumentReference ref = await db.collection('TurnosAcademico').add({
@@ -150,7 +160,7 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
           setState(() => id = ref.documentID);
           print(ref.documentID);*/
           DocumentReference ref2 = await db
-              .collection('TurnosAcademico_Tokens')
+              .collection('${widget.list["Nombre"]}${widget.list["Apellido"]}_Tokens')
               .add({'token': '$Token', 'email': '$email'});
           setState(() => id = ref2.documentID);
           print(ref2.documentID);
@@ -215,11 +225,12 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
 
 
   @override
+  
 
   Widget image_carousel = new Container(
-        height: 140.0,
+        height: 100.0,
         child: CarouselSlider(
-          height: 140.0,
+          height: 100.0,
           autoPlay: true,
 
           items: [
@@ -253,13 +264,14 @@ class _PedirTurnoAcademicoPage extends State<PedirTurnoAcademicoPage>{
         ));
 
   Widget build(BuildContext context) {
+    cargarProfesor();
     return Scaffold(
       key: _scaffoldState,
      body: Center(
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              title: Text('Pedir Turno',style: TextStyle(
+              title: Text('Pedir Turno ${widget.list["Nombre"]}',style: TextStyle(
                 color:Colors.white,fontSize: 25.0,
                                     fontFamily: 'Questrial',
                                     fontWeight: FontWeight.w500),),

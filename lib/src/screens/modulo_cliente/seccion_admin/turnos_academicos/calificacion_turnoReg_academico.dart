@@ -96,7 +96,22 @@ class _CaliTurnoRegAcademicoPage extends State<CaliTurnoRegAcademicoPage> {
           batch.commit();
 
 
-         Navigator.of(context).pop();
+              _scaffoldState.currentState.showSnackBar(new SnackBar(
+          content: new Text(
+            'Gracias por tu calificacion',
+            style: new TextStyle(
+              color: Colors.white,
+              fontFamily: 'Questrial',
+              fontSize: 20,
+              fontWeight: FontWeight.w600
+              ),
+          ),
+          backgroundColor: Color(0xFF01DF3A),
+        ));
+
+        
+
+
 
          
 
@@ -130,7 +145,7 @@ class _CaliTurnoRegAcademicoPage extends State<CaliTurnoRegAcademicoPage> {
           children: <Widget>[
             Container(child:Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(child: Text("Tu turno ha sido pedido exitosamente, Califica como te parecio nuestro servicio",
+              child: Container(child: Text("Es muy importante para nosotros conocer la opinion de nuestros usuarios, Califica como te parecio nuestro servicio",
                 style: TextStyle(color: Colors.green[500], fontSize: 22.0,fontWeight:FontWeight.bold, fontFamily: 'Questrial'),textAlign: TextAlign.center,)),
             ),),
             Container(
@@ -185,6 +200,25 @@ class _CaliTurnoRegAcademicoPage extends State<CaliTurnoRegAcademicoPage> {
                               });
                             },
                           ),),
+                        ),
+
+                        Padding( 
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: "Deja un comentario sobre el servicio",
+                                  hintText: "Comentario",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(4.0)
+                                  )
+
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                        
                         Padding(

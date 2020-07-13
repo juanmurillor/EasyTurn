@@ -1,5 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'package:easy_turn/notifier/profesor_notifier.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_turn/model/profesores.dart';
+
+
+
 
 abstract class BaseAuth {
     Future<String> signInWithEmailAndPassword(String email, String password);
@@ -52,4 +58,7 @@ class Auth implements BaseAuth{
     }
 
 
+
+
 }
+

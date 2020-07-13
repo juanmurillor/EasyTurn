@@ -1,43 +1,45 @@
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_financiera.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_academicos.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_facultades/menu_programas_ingenieria.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_caja.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_financiera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_turn/notifier/profesor_notifier.dart';
+import 'package:provider/provider.dart';
+
+
 
 import 'package:flutter/material.dart';
 
-class MenuSeccAdministrativaPage extends StatefulWidget{
+class MenuSeccionesPage extends StatefulWidget{
 
   @override
-    State<StatefulWidget> createState () => new _MenuSeccAdministrativaPage();
+    State<StatefulWidget> createState () => new _MenuSeccionesPage();
 
 
    
 
 }
-class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
+class _MenuSeccionesPage extends State<MenuSeccionesPage>{
 
-  void moveToMenuTurnosFinancieraPage(){
+  void moveToMenuSeccAdministrativaPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuTurnosFinancieraPage()),
+                MaterialPageRoute(builder: (context) => MenuSeccAdministrativaPage()),
               );
   }
-  void moveToMenuTurnosCajaPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuTurnosCajaPage()),
-              );
-  }
-  void moveToMenuTurnosAcademicosPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuTurnosAcademicosPage()),
-              );
-  }
+  void moveToMenuFacultadIngPage(){
 
+   
+    Navigator.push(
+                  
+                context,
+                MaterialPageRoute(builder: (context) => MenuProgramasIngPage()),
+              );
+  }
+  
 
 
   @override
@@ -83,7 +85,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registro Academico",style: new TextStyle(
+        title: Text("Secciones",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -108,7 +110,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Turnos Area Academica",
+                        "Registro Academico",
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -135,7 +137,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuTurnosAcademicosPage,
+            onPressed: moveToMenuSeccAdministrativaPage,
             ),
           ), 
           Padding(
@@ -154,7 +156,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Turnos Area Financiera",
+                        "Facultad de ingenieria",
                        style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -181,55 +183,10 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuTurnosFinancieraPage,
+            onPressed: moveToMenuFacultadIngPage,
              ),
             ),
-             Padding(
-             padding: const EdgeInsets.all(16.0),
-             child: new FlatButton(
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 250,
-                      child: new FlatButton(
-                       child: new Text(
-                        "Turnos Area de Cajas",
-                      style: new TextStyle(fontSize: 35.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                       fontFamily: 'Questrial'
-                      ),
-                      ),
-                      
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/12/06/04/26/cash-register-1885558_960_720.jpg"),
-                        ),
-                      ),
-                    )
-                  ],
-               ),
-              ),
-            ),
-            ),
-            onPressed: moveToMenuTurnosCajaPage,
-             ),
-            )
+             
           ],
       
           

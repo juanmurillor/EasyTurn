@@ -8,7 +8,8 @@ import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_turn/src/screens/modulo_publicidad/menu_publicidad.dart';
-
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/calificacion_turnoReg_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_secciones.dart';
 
 
 
@@ -78,10 +79,16 @@ class _ClientePageState extends State<ClientePage>{
                 MaterialPageRoute(builder: (context) => MenuPublicidadPage()),
               );
   }
-  void moveToMenuSeccAdministrativaPage(){
+  void moveToMenuSeccionesPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuSeccAdministrativaPage()),
+                MaterialPageRoute(builder: (context) => MenuSeccionesPage()),
+              );
+  }
+  void moveToCalificarServicioPage(){
+    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CaliTurnoRegAcademicoPage()),
               );
   }
   
@@ -102,9 +109,9 @@ void _signOut() async {
 
   @override
   Widget image_carousel = new Container(
-        height: 140.0,
+        height: 100.0,
         child: CarouselSlider(
-          height: 140.0,
+          height: 100.0,
           autoPlay: true,
 
           items: [
@@ -196,53 +203,6 @@ void _signOut() async {
       body: new  ListView(
         scrollDirection: Axis.vertical,
         children: <Widget>[
-         /* Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FlatButton(
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                 
-                  children: <Widget>[
-                    Container(
-                      width: 250,
-                      child: new FlatButton(
-                      child: new Text(
-                        "Ubicate en la USB",
-                      style: new TextStyle(fontSize: 40.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Questrial'
-                      ),
-                      ),
-                      onPressed: moveToMenuSeccAdministrativaPage,
-                      )
-                    ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2013/07/13/14/05/location-162102_960_720.png"),
-                        ),
-                      ),
-                    )
-                  ],
-               ),
-              ),
-            ),
-            ),
-            
-            ),
-          ), */
           Padding(
              padding: const EdgeInsets.all(16.0),
             child: new FlatButton( 
@@ -266,7 +226,7 @@ void _signOut() async {
                       fontFamily: 'Questrial'
                       ),
                       ),
-                      onPressed: moveToMenuSeccAdministrativaPage,
+                      onPressed: moveToMenuSeccionesPage,
                       ),
                     ),
                     Container(
@@ -277,7 +237,7 @@ void _signOut() async {
                         child: Image(
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("http://www.farestaie.com/webcheckin/img/solicitar-turno.png"),
+                          image: NetworkImage("https://www.claro.com.co/portal/co/recursos_contenido/1585613186670.png"),
                         ),
                       
                       ),
@@ -287,7 +247,7 @@ void _signOut() async {
               ),
             ),
             ),
-            onPressed: moveToMenuSeccAdministrativaPage,
+            onPressed: moveToMenuSeccionesPage,
             ),
           ),
           Padding(
@@ -335,6 +295,53 @@ void _signOut() async {
             ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FlatButton(
+            child: Container(
+              child: FittedBox(
+              child: Material(
+               color: Colors.white ,
+               elevation: 14.0,
+               borderRadius: BorderRadius.circular(24.0),
+               shadowColor: Color(0x802196F3),
+               child: Row(
+                 
+                  children: <Widget>[
+                    Container(
+                      width: 250,
+                      child: new FlatButton(
+                      child: new Text(
+                        "Califica nuestro servicio",
+                      style: new TextStyle(fontSize: 40.0, 
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Questrial'
+                      ),
+                      ),
+                      onPressed: moveToCalificarServicioPage,
+                      )
+                    ),
+                    Container(
+                      width: 300,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(24.0),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topRight,
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2018/03/19/09/25/feedback-3239454_960_720.jpg"),
+                        ),
+                      ),
+                    )
+                  ],
+               ),
+              ),
+            ),
+            ),
+            onPressed: moveToCalificarServicioPage,
+            ),
+          ), 
           ],
       
           

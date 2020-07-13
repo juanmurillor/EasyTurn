@@ -249,14 +249,18 @@ class TurnosCajaList extends StatelessWidget {
               children:
                   snapshot.data.documents.map((DocumentSnapshot document) {
                 return new Card(
+
                   child: Padding(
+
                     padding: const EdgeInsets.all(30.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         new Row(
+
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            
                             new Text('Turno: ${document['Turno']}',
                                 style: TextStyle(
                                     fontSize: 50.0,
@@ -296,6 +300,7 @@ class TurnosCajaList extends StatelessWidget {
                       ],
                     ),
                   ),
+                  
                 );
               }).toList(),
             );

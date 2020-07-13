@@ -1,89 +1,63 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_academic.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_financiera.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_academicos.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_caja.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_de_turnos/menu_turnos_financiera.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/pedir_turno_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/reservar_turno_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/lista_turnos_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/mis_turnos_academico.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/seccion_facultades/profesores/pedir_turno_profesores.dart';
 import 'package:flutter/material.dart';
 
-class MenuSeccAdministrativaPage extends StatefulWidget{
+class MenuProfesoresPage extends StatefulWidget{
+  final DocumentSnapshot list;
+  MenuProfesoresPage(this.list);
+
 
   @override
-    State<StatefulWidget> createState () => new _MenuSeccAdministrativaPage();
+    State<StatefulWidget> createState () => new _MenuProfesoresPage();
 
 
    
 
 }
-class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
+class _MenuProfesoresPage extends State<MenuProfesoresPage>{
 
-  void moveToMenuTurnosFinancieraPage(){
+
+  void moveToPedirTurnoProfesoresPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuTurnosFinancieraPage()),
+                MaterialPageRoute(builder: (context) => PedirTurnoProfesoresPage(widget.list)),
               );
   }
-  void moveToMenuTurnosCajaPage(){
+  void moveToReservarTurnoTurnoAcademicoPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuTurnosCajaPage()),
+                MaterialPageRoute(builder: (context) => ReservarTurnoTurnoAcademicoPage()),
               );
   }
-  void moveToMenuTurnosAcademicosPage(){
+  void moveToListaTurnosAcademicosPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuTurnosAcademicosPage()),
+                MaterialPageRoute(builder: (context) => ListaTurnosAcademicosPage()),
+              );
+  }
+
+  void moveToMisTurnosAcademicoPage(){
+    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MisTurnosAcademicoPage()),
               );
   }
 
 
 
   @override
-
-  Widget image_carousel = new Container(
-        height: 100.0,
-        child: CarouselSlider(
-          height: 100.0,
-          autoPlay: true,
-
-          items: [
-            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
-            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4'
-          ].map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(color: Colors.amber),
-                    child: GestureDetector(
-                        child: Image.network(i, fit: BoxFit.fill),
-                        onTap  : () async
-                          {
-                            const url = 'https://www.usbcali.edu.co/';
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            } else {
-                              throw 'Could not launch $url';
-                            }
-                          
-                        },
-                        )
-                        );
-                        
-              },
-            );
-          }).toList(),
-        ));
-
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registro Academico",style: new TextStyle(
+        title: Text("Turnos Asesoría",style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -108,7 +82,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Turnos Area Academica",
+                        "Pedir turno con ${widget.list["Nombre"]} ${widget.list["Apellido"]}",
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -126,7 +100,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                            
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/10/12/19/54/homework-1735644_960_720.png"),
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2013/07/12/15/34/ticket-150090_960_720.png"),
                         ),
                       ),
                     )
@@ -135,7 +109,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuTurnosAcademicosPage,
+            onPressed: moveToPedirTurnoProfesoresPage
             ),
           ), 
           Padding(
@@ -154,7 +128,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Turnos Area Financiera",
+                        "Reservar un turno con ${widget.list["Nombre"]} ${widget.list["Apellido"]}",
                        style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -172,7 +146,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                         child: Image(
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2018/02/15/09/48/paperwork-3154814_960_720.jpg"),
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2017/05/15/23/48/survey-2316468_960_720.png"),
                         ),
                       ),
                     )
@@ -181,7 +155,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuTurnosFinancieraPage,
+            onPressed: moveToReservarTurnoTurnoAcademicoPage,
              ),
             ),
              Padding(
@@ -200,7 +174,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Turnos Area de Cajas",
+                        "Ver listado de turnos",
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -218,7 +192,7 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
                         child: Image(
                           fit: BoxFit.cover,
                           alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/12/06/04/26/cash-register-1885558_960_720.jpg"),
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2016/07/04/12/14/steps-1496523_960_720.png"),
                         ),
                       ),
                     )
@@ -227,14 +201,57 @@ class _MenuSeccAdministrativaPage extends State<MenuSeccAdministrativaPage>{
               ),
             ),
             ),
-            onPressed: moveToMenuTurnosCajaPage,
+            onPressed: moveToListaTurnosAcademicosPage
+             ),
+            ),
+             Padding(
+             padding: const EdgeInsets.all(16.0),
+             child: new FlatButton(
+            child: Container(
+              child: FittedBox(
+              child: Material(
+               color: Colors.white ,
+               elevation: 14.0,
+               borderRadius: BorderRadius.circular(24.0),
+               shadowColor: Color(0x802196F3),
+               child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 250,
+                      child: new FlatButton(
+                       child: new Text(
+                        "Mis Turnos",
+                      style: new TextStyle(fontSize: 35.0, 
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                       fontFamily: 'Questrial'
+                      ),
+                      ),
+                      
+                      ),
+                    ),
+                    Container(
+                      width: 300,
+                      height: 250,
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(24.0),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topRight,
+                          image: NetworkImage("https://cdn.pixabay.com/photo/2015/12/03/14/53/cinema-ticket-1075066_960_720.png"),
+                        ),
+                      ),
+                    )
+                  ],
+               ),
+              ),
+            ),
+            ),
+           onPressed: moveToMisTurnosAcademicoPage,
              ),
             )
-          ],
-      
-          
+          ],      
       ),
-      bottomSheet: image_carousel,
     );
   }
 

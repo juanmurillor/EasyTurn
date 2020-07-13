@@ -99,8 +99,9 @@ class _ReservarTurnoTurnoAcademicoPage extends State<ReservarTurnoTurnoAcademico
             print(docs.documents[i].data);
           }
           print("este es el nombre " + resultado[0][3]);
-          Nombre = resultado[0][4];
-          Apellido = resultado[0][2];
+          Nombre = resultado[0][3];
+          Apellido = resultado[0][1];
+
           DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
           String fechaHora = dateFormat.format(DateTime.now());
 
