@@ -1,63 +1,64 @@
-
+import 'package:basic_utils/basic_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_academic.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_cajas.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_area_financiera.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/pedir_turno_academico.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/reservar_turno_academico.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/lista_turnos_academico.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/mis_turnos_academico.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_facultades/profesores/pedir_turno_profesores.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_de_turnos/mis_turnos.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_de_turnos/pedir_turno.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_de_turnos/reservar_turno.dart';
+
 import 'package:flutter/material.dart';
 
-class MenuProfesoresPage extends StatefulWidget{
-  final DocumentSnapshot list;
-  MenuProfesoresPage(this.list);
+import 'lista_turnos.dart';
 
+class MenuTurnosPage extends StatefulWidget{
+  DocumentSnapshot documentSnapshot;
+  MenuTurnosPage({Key key, @required this.documentSnapshot}):super(key:key);
 
   @override
-    State<StatefulWidget> createState () => new _MenuProfesoresPage();
-
-
-   
-
+    State<StatefulWidget> createState () => new _MenuTurnosPage();
 }
-class _MenuProfesoresPage extends State<MenuProfesoresPage>{
+class _MenuTurnosPage extends State<MenuTurnosPage>{
 
-
-  void moveToPedirTurnoProfesoresPage(){
+  void moveToPedirTurnoPage(){
     Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PedirTurnoProfesoresPage(widget.list)),
-              );
-  }
-  void moveToReservarTurnoTurnoAcademicoPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ReservarTurnoTurnoAcademicoPage()),
-              );
-  }
-  void moveToListaTurnosAcademicosPage(){
-    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ListaTurnosAcademicosPage()),
-              );
+        context,
+        MaterialPageRoute(builder: (context) => PedirTurnoPage(caja: widget.documentSnapshot.reference ,))
+    );
   }
 
-  void moveToMisTurnosAcademicoPage(){
+  void moveToReservarTurnoTurnoPage(){
     Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MisTurnosAcademicoPage()),
-              );
+        context,
+        MaterialPageRoute(builder: (context) => ReservarTurnoPage(caja: widget.documentSnapshot ,))
+    );
   }
 
+  void moveToListaTurnosPage(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ListaTurnosPage(caja: widget.documentSnapshot ,))
+    );
+  }
 
+  void moveToMisTurnospage(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MisTurnosPage(caja: widget.documentSnapshot ,))
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Turnos Asesoría",style: new TextStyle(
+        title: Text("Turnos " + 
+            (widget.documentSnapshot.data["docente"] == true ?  "Profesor" :StringUtils.capitalize(widget.documentSnapshot.data["nombre"])
+
+            ),style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
         ),),
@@ -82,7 +83,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Pedir turno con ${widget.list["Nombre"]} ${widget.list["Apellido"]}",
+                        "Pedir un turno" + (widget.documentSnapshot.data["docente"] == true ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -109,7 +110,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
               ),
             ),
             ),
-            onPressed: moveToPedirTurnoProfesoresPage
+            onPressed: moveToPedirTurnoPage,
             ),
           ), 
           Padding(
@@ -128,7 +129,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Reservar un turno con ${widget.list["Nombre"]} ${widget.list["Apellido"]}",
+                        "Reservar un turno"  + (widget.documentSnapshot.data["docente"] == true ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                        style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -155,7 +156,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
               ),
             ),
             ),
-            onPressed: moveToReservarTurnoTurnoAcademicoPage,
+            onPressed: moveToReservarTurnoTurnoPage,
              ),
             ),
              Padding(
@@ -174,7 +175,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Ver listado de turnos",
+                        "Ver listado de turnos"  + (widget.documentSnapshot.data["docente"] ==true ? " de ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -201,7 +202,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
               ),
             ),
             ),
-            onPressed: moveToListaTurnosAcademicosPage
+            onPressed: moveToListaTurnosPage
              ),
             ),
              Padding(
@@ -221,7 +222,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
                       child: new FlatButton(
                        child: new Text(
                         "Mis Turnos",
-                      style: new TextStyle(fontSize: 35.0, 
+                      style: new TextStyle(fontSize: 35.0,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
                        fontFamily: 'Questrial'
@@ -247,7 +248,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage>{
               ),
             ),
             ),
-           onPressed: moveToMisTurnosAcademicoPage,
+           onPressed: moveToMisTurnospage,
              ),
             )
           ],      

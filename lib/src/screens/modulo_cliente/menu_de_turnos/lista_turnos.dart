@@ -1,0 +1,124 @@
+import 'package:basic_utils/basic_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_turn/src/screens/Comun/FooterSlider.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_turn/src/screens/login/auth.dart';
+import 'package:easy_turn/src/screens/login/buscar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class ListaTurnosPage extends StatefulWidget {
+  ListaTurnosPage({this.auth, this.onSignedOut, @required this.caja});
+  final DocumentSnapshot caja;
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  @override
+  State<StatefulWidget> createState() => new _ListaTurnosPage();
+}
+
+class _ListaTurnosPage extends State<ListaTurnosPage> {
+  final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
+
+  final db = Firestore.instance;
+  static DateTime now = DateTime.now(); //DateTime
+  DateTime today = DateTime.utc(now.year, now.month, now.day);
+  String id;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldState,
+      appBar: AppBar(
+        title: Text(
+          widget.caja.data["docente"] == true
+              ? "Turnos Profesor"
+              : "Turnos " + StringUtils.capitalize(widget.caja.data["nombre"]),
+          style: new TextStyle(fontFamily: 'FugazOne', fontSize: 23),
+        ),
+      ),
+      body: new StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('turnos')
+            .where('caja', isEqualTo: widget.caja.reference)
+            .where("fecha_atencion", isEqualTo: Timestamp.fromDate(today))
+            .where("atendido", isEqualTo: false)
+            .where("eliminado", isEqualTo: false)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+          if (snapshot.data == null || snapshot.data.documents.isEmpty)
+            return new Text('   \n  No hay turnos en espera actualmente',
+                style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Questrial',
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center);
+
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return new Text('Loading...');
+            default:
+              return new ListView(
+                children:
+                    snapshot.data.documents.map((DocumentSnapshot document) {
+                  return new Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          new Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text(document["reservado"] ?
+                                'Hora: ${document["hora_atencion"]} '
+                                    :'Turno: ${document['turno']}',
+                                    style: TextStyle(
+                                        fontSize: 50.0,
+                                        fontFamily: 'Questrial',
+                                        fontWeight: FontWeight.w700),
+                                    textAlign: TextAlign.right),
+                              ]),
+                          new Row(
+                            children: <Widget>[new Text("     ")],
+                          ),
+                          new Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Text('Nombre: ${StringUtils.capitalize(document['nombre'])}',
+                                  style: TextStyle(
+                                      fontSize: 30.0,
+                                      fontFamily: 'Questrial',
+                                      fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.right),
+                            ],
+                          ),
+                          new Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text('Apellido: ${StringUtils.capitalize(document['apellido'])}',
+                                    style: TextStyle(
+                                        fontSize: 30.0,
+                                        fontFamily: 'Questrial',
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.right),
+                              ])
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+          }
+        },
+      ),
+      bottomSheet: FooterSlider(),
+    );
+  }
+
+}

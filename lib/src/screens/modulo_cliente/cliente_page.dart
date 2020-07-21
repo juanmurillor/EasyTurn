@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_turn/src/screens/Comun/FooterSlider.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/menu_secc_administrativa.dart';
+import 'package:easy_turn/src/screens/login/cambiar_contrasena.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_enterate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,8 +10,9 @@ import 'package:easy_turn/src/screens/login/buscar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_turn/src/screens/modulo_publicidad/menu_publicidad.dart';
-import 'package:easy_turn/src/screens/modulo_cliente/seccion_admin/turnos_academicos/calificacion_turnoReg_academico.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/menu_secciones.dart';
+
+import 'CalificacionApp.dart';
 
 
 
@@ -24,32 +27,37 @@ class ClientePage extends StatefulWidget {
     }
 class _ClientePageState extends State<ClientePage>{
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  final db = Firestore.instance;
 
    static String emailUsu = "";
    static String Nombre = "";
    static String Apellido = "";
+   static String urlImagen;
    var listaUsuarios = [];
+
 
   
     Future<String>  userEmail() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      emailUsu = user.email;
+      setState(() {
+        emailUsu = user.email;
+        urlImagen = user.photoUrl;
+      });
       //print(emailUsu);
       }
 
-    void usuario(){
-    
+    void usuario() async{
+      final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      db.collection('usuarios').document(user.uid).get().then((snapshot) {
+        setState(() {
+          Nombre = snapshot.data['nombre'];
+          Apellido = snapshot.data['apellido'];
+        });
 
-    Buscar().buscarusuario(emailUsu).then((QuerySnapshot docs2) async {
-      for (int i = 0; i < docs2.documents.length; i++) {
-        listaUsuarios.add(docs2.documents[i].data.values.toList());
-        //print(docs.documents[i].data);
-      }
-      Nombre = listaUsuarios[0][4];
-      Apellido = listaUsuarios[0][2];
-    });
+      });
     }
-  
+
+
   @override
   void initState(){
     super.initState();
@@ -71,12 +79,15 @@ class _ClientePageState extends State<ClientePage>{
       print('Este es el token');
       print(token);
     });
+
+    userEmail();
+    usuario();
   }
 
  void moveToMenuPublicidadPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuPublicidadPage()),
+                MaterialPageRoute(builder: (context) => MenuEnteratePage()),
               );
   }
   void moveToMenuSeccionesPage(){
@@ -88,10 +99,16 @@ class _ClientePageState extends State<ClientePage>{
   void moveToCalificarServicioPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CaliTurnoRegAcademicoPage()),
+                MaterialPageRoute(builder: (context) => CalificacionAppPage()),
               );
   }
-  
+
+  void moveToCambiarContasenaPage(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CambiarContasenaPage()),
+    );
+  }
 void _signOut() async {
 
   try{
@@ -106,50 +123,7 @@ void _signOut() async {
  
 
   
-
-  @override
-  Widget image_carousel = new Container(
-        height: 100.0,
-        child: CarouselSlider(
-          height: 100.0,
-          autoPlay: true,
-
-          items: [
-            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/bannerpagina-virtual_0.jpg?itok=nQ63tL_p',
-            'https://www.usbcali.edu.co/sites/default/files/styles/slide/public/inscripciones_2020-2-01_0.jpg?itok=tJi6mRZ4',
-            
-          ].map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(color: Colors.amber),
-                    child: GestureDetector(
-                        child: Image.network(i, fit: BoxFit.fill),
-                        onTap  : () async
-                          {
-                            const url = 'https://www.usbcali.edu.co/';
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            } else {
-                              throw 'Could not launch $url';
-                            }
-                          
-                        },
-                        )
-                        );
-                        
-              },
-            );
-          }).toList(),
-        ));
-
-
   Widget build(BuildContext context) {
-    userEmail();
-    usuario();
-
     return Scaffold(
 
       
@@ -180,7 +154,7 @@ void _signOut() async {
               ),),
               currentAccountPicture: new GestureDetector(
                 child: new CircleAvatar(
-                  backgroundImage: new NetworkImage("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"),
+                  backgroundImage: new NetworkImage(urlImagen == null || urlImagen == ""? "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" : urlImagen),
                 )
               ),
               decoration: new BoxDecoration(
@@ -190,164 +164,171 @@ void _signOut() async {
                 )
               ),
             ),
-                new ListTile(
+            new ListTile(
+              title: new Text("Cambiar contraseña",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial', fontWeight: FontWeight.w500),),
+              onTap: moveToCambiarContasenaPage,
+            ),
+            new ListTile(
               title: new Text("Cerrar Sesion",style: new TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'Questrial', fontWeight: FontWeight.w500),),
               trailing: new Icon(Icons.close),
               onTap: _signOut,
             ), 
+
             new Divider(),
-           
           ],
         )
       ),
-      body: new  ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Padding(
-             padding: const EdgeInsets.all(16.0),
-            child: new FlatButton( 
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 258,
-                      child: new FlatButton(
-                       child: new Text(
-                        "Gestiona tu turno",
-                      style: new TextStyle(fontSize: 40.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Questrial'
-                      ),
-                      ),
-                      onPressed: moveToMenuSeccionesPage,
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          image: NetworkImage("https://www.claro.com.co/portal/co/recursos_contenido/1585613186670.png"),
-                        ),
-                      
-                      ),
-                    )
-                  ],
-               ),
-              ),
-            ),
-            ),
-            onPressed: moveToMenuSeccionesPage,
-            ),
-          ),
-          Padding(
-             padding: const EdgeInsets.all(16.0),
-            child: new FlatButton( 
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 258,
-                      child: new FlatButton(
-                       child: new Text(
-                        "Enterate sobre nosotros",
-                      style: new TextStyle(fontSize: 40.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Questrial'
-                      ),
-                      ),
+      body:
+        new  ListView(
+          padding: EdgeInsets.only(bottom: 100),
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: new FlatButton(
+                child: Container(
+                  child: FittedBox(
+                    child: Material(
+                      color: Colors.white ,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 258,
+                            child: new FlatButton(
+                              child: new Text(
+                                "Gestiona tu turno",
+                                style: new TextStyle(fontSize: 40.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Questrial'
+                                ),
+                              ),
+                              onPressed: moveToMenuSeccionesPage,
+                            ),
+                          ),
+                          Container(
+                            width: 300,
+                            height: 250,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topRight,
+                                image: NetworkImage("https://www.claro.com.co/portal/co/recursos_contenido/1585613186670.png"),
+                              ),
+
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
-                          image: NetworkImage("https://elclavo.com/wp-content/uploads/2015/06/Universidaddesan-buenaventura20130927.jpg"),
-                        ),
-                      
-                      ),
-                    )
-                  ],
-               ),
+                  ),
+                ),
+                onPressed: moveToMenuSeccionesPage,
               ),
             ),
-            ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FlatButton(
-            child: Container(
-              child: FittedBox(
-              child: Material(
-               color: Colors.white ,
-               elevation: 14.0,
-               borderRadius: BorderRadius.circular(24.0),
-               shadowColor: Color(0x802196F3),
-               child: Row(
-                 
-                  children: <Widget>[
-                    Container(
-                      width: 250,
-                      child: new FlatButton(
-                      child: new Text(
-                        "Califica nuestro servicio",
-                      style: new TextStyle(fontSize: 40.0, 
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Questrial'
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: new FlatButton(
+                child: Container(
+                  child: FittedBox(
+                    child: Material(
+                      color: Colors.white ,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 258,
+                            child: new FlatButton(
+                              child: new Text(
+                                "Enterate sobre nosotros",
+                                style: new TextStyle(fontSize: 40.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Questrial'
+                                ),
+                              ),
+                              onPressed: moveToMenuPublicidadPage,
+                            ),
+                          ),
+                          Container(
+                            width: 300,
+                            height: 250,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                                image: NetworkImage("https://elclavo.com/wp-content/uploads/2015/06/Universidaddesan-buenaventura20130927.jpg"),
+                              ),
+
+                            ),
+                          )
+                        ],
                       ),
-                      ),
-                      onPressed: moveToCalificarServicioPage,
-                      )
                     ),
-                    Container(
-                      width: 300,
-                      height: 250,
-                      child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(24.0),
-                        child: Image(
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          image: NetworkImage("https://cdn.pixabay.com/photo/2018/03/19/09/25/feedback-3239454_960_720.jpg"),
-                        ),
-                      ),
-                    )
-                  ],
-               ),
+                  ),
+                ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FlatButton(
+                child: Container(
+                  child: FittedBox(
+                    child: Material(
+                      color: Colors.white ,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+
+                        children: <Widget>[
+                          Container(
+                              width: 250,
+                              child: new FlatButton(
+                                child: new Text(
+                                  "Califica nuestro servicio",
+                                  style: new TextStyle(fontSize: 40.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Questrial'
+                                  ),
+                                ),
+                                onPressed: moveToCalificarServicioPage,
+                              )
+                          ),
+                          Container(
+                            width: 300,
+                            height: 250,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topRight,
+                                image: NetworkImage("https://cdn.pixabay.com/photo/2018/03/19/09/25/feedback-3239454_960_720.jpg"),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: moveToCalificarServicioPage,
+              ),
             ),
-            onPressed: moveToCalificarServicioPage,
-            ),
-          ), 
           ],
-      
-          
-      ),
-      bottomSheet: image_carousel,
-      
+
+
+        ),
+      bottomSheet: FooterSlider(),
+
     );
   }
 }

@@ -58,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool validateAndSave() {
     final form = formKey.currentState;
-      
     if (form.validate()) {
       form.save();
       return true;
@@ -68,13 +67,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateAndSubmit() async {
     if (validateAndSave()) {
-     
       try {
         if (_formType == FormType.login) {
-          FirebaseUser user =await FirebaseAuth.instance.currentUser();
-          String userId =
-              await widget.auth.signInWithEmailAndPassword(_email, _password);
-              if(user.isEmailVerified){       
+          var userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
+          FirebaseUser user = await FirebaseAuth.instance.currentUser();
+              if(user.isEmailVerified){
           print('sesion iniciada por: $userId');
           var resultado = [];
            widget.onSignedInAsCliente();    
@@ -89,21 +86,17 @@ class _LoginPageState extends State<LoginPage> {
             print(resultado[0][3]);
            
             
-          });}else 
-          _scaffoldState.currentState.showSnackBar(new SnackBar(
-            content: new Text(
-              'Verifica tu cuenta para poder iniciar sesion',
-              style: new TextStyle(color: Colors.black),
-            ),
-            backgroundColor: Color(0xFF64FF7F),
-          ));
-          //resultado.forEach((resultado)=>print(resultado));
-          //DocumentSnapshot snapshot = await db.collection('usuarios').getDocuments().get();
-          //print(snapshot.data);
-          /*if (_email == snapshot.data['email']) {
-          
-        }*/
-          //_scaffoldState.currentState.showSnackBar(new SnackBar(content: new Text('Sesion iniciada, Bienvenido'),));
+          });}else {
+                user.sendEmailVerification();
+                _scaffoldState.currentState.showSnackBar(new SnackBar(
+                  content: new Text(
+                    'Verifica tu cuenta para poder iniciar sesion',
+                    style: new TextStyle(color: Colors.black),
+                  ),
+                  backgroundColor: Color(0xFF64FF7F),
+                ));
+                FirebaseAuth.instance.signOut();
+              }
         }else {
           
           String userId = await widget.auth
@@ -145,15 +138,13 @@ class _LoginPageState extends State<LoginPage> {
 
       guardarUsuario();
 
-          DocumentReference ref = await db.collection('usuarios').add({
+          await db.collection('usuarios').document(userId).setData({
             'nombre': '$_nombre',
             'apellido': '$_apellido',
             'telefono': '$_telefono',
-            'email': '$_email',
-            'contraseña': '$_password',
+            'email': '$_email'
           });
-          setState(() => id = ref.documentID);
-          print(ref.documentID);
+          setState(() => id = userId);
           _scaffoldState.currentState.showSnackBar(new SnackBar(
             content: new Text(
               'Tu cuenta se ha creado con exito, revisa tu email para verificarla',
