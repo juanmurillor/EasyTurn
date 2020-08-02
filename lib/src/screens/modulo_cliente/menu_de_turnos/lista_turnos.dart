@@ -11,8 +11,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListaTurnosPage extends StatefulWidget {
-  ListaTurnosPage({this.auth, this.onSignedOut, @required this.caja});
+  ListaTurnosPage({this.auth, this.onSignedOut, @required this.caja, this.ready:false});
   final DocumentSnapshot caja;
+  final bool ready;
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   @override
@@ -25,10 +26,48 @@ class _ListaTurnosPage extends State<ListaTurnosPage> {
 
   final db = Firestore.instance;
   static DateTime now = DateTime.now(); //DateTime
-  DateTime today = DateTime.utc(now.year, now.month, now.day);
+  DateTime today = DateTime(now.year, now.month, now.day);
+  DateTime tomorrow = DateTime(now.year, now.month, now.day +1 );
   String id;
 
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.ready == true){
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => isReady(context));
+    };
+  }
+  void isReady(context){
+    print("al menos llega a ready");
+    print(widget.caja.data.toString());
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Tu turno ya esta listo"),
+          content: new Text("Es tu turno " +
+              ((widget.caja.reference.path.contains('secciones/cajas/subareas/*/') != null) ? "en la caja" : "con el profesor") ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+
+            new FlatButton(
+              child: new Text("Aceptar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +82,12 @@ class _ListaTurnosPage extends State<ListaTurnosPage> {
       ),
       body: new StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection('turnos')
-            .where('caja', isEqualTo: widget.caja.reference)
-            .where("fecha_atencion", isEqualTo: Timestamp.fromDate(today))
-            .where("atendido", isEqualTo: false)
-            .where("eliminado", isEqualTo: false)
+              .collection('turnos')
+              .where('caja', isEqualTo: widget.caja.reference)
+              .where("fecha_atencion", isGreaterThanOrEqualTo: Timestamp.fromDate(today))
+              .where("fecha_atencion", isLessThan: Timestamp.fromDate(tomorrow))
+              .where("atendido", isEqualTo: false)
+              .where("eliminado", isEqualTo: false)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_turn/src/screens/Comun/FooterSlider.dart';
 import 'package:easy_turn/src/screens/login/auth.dart';
 import 'package:easy_turn/src/screens/login/cambiar_contrasena.dart';
+import 'package:easy_turn/src/screens/modulo_cliente/menu_de_turnos/lista_turnos.dart';
 import 'package:easy_turn/src/screens/modulo_cliente/menu_enterate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,27 +62,55 @@ class _ClientePageState extends State<ClientePage>{
   @override
   void initState(){
     super.initState();
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print('Hola');
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('Hola2');
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('Hola3');
-        print('on launch $message');
-      },
-    );
-    _firebaseMessaging.getToken().then((token){
-      print('Este es el token');
-      print(token);
-    });
-
+    firemess();
     userEmail();
     usuario();
+  }
+
+  void firemess()async{
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    _firebaseMessaging.subscribeToTopic(user.uid);
+    print(user.uid);
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        DocumentSnapshot doc = await db.document(message["data"]["caja"]).get();
+        print("docggeted" + doc.data.toString());
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ListaTurnosPage(caja: doc, ready: message["data"]["ready"] == 'true',)),
+        );
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        DocumentSnapshot doc = await db.document(message["data"]["caja"]).get();
+        print("docggeted" + doc.data.toString());
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ListaTurnosPage(caja: doc, ready: message["data"]["ready"] == 'true',)),
+        );
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true)
+    );
+  }
+
+  Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+    }
+
+    // Or do other work.
   }
 
  void moveToMenuPublicidadPage(){

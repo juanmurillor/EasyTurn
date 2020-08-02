@@ -36,21 +36,27 @@ class _PedirTurnoPage extends State<PedirTurnoPage>{
     if(query.documents.length == 0){
       DateTime now = DateTime.now(); //DateTime
       DateTime today = DateTime(now.year, now.month, now.day);
+      DateTime tomorrow = DateTime(now.year, now.month, now.day +1 );
 
       var alldocs = await db.collection('turnos')
           .where('caja', isEqualTo: widget.caja)
-          .where("fecha_atencion", isEqualTo: today)
+          .where("fecha_atencion", isLessThan: Timestamp.fromDate(tomorrow))
+          .where("fecha_atencion", isGreaterThanOrEqualTo: Timestamp.fromDate(today))
           .where("reservado" , isEqualTo: false)
           .getDocuments();
+      print(alldocs);
       var data = {
         "caja": widget.caja,
         "usuario": usuario,
         "atendido": false,
         "fecha_atencion": Timestamp.fromDate(today),
+         "fecha_creacion": Timestamp.fromDate(now),
         "turno":alldocs.documents.length + 1,
         "reservado":false,
         "nombre": userData.data["nombre"],
         "apellido": userData.data["apellido"],
+        "email": userData.data["email"],
+        "telefono": userData.data["telefono"],
         "eliminado" : false
       };
       db.collection('turnos').add(data).then((value) {

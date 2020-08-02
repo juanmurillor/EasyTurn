@@ -57,6 +57,25 @@ class _CalificacionAppPage extends State<CalificacionAppPage> {
           calified=true;
           comentario = document.data["comentario"];
           sliderValue = document.data["calificacion"];
+          if (sliderValue >= 0.0 &&
+              sliderValue <= 1.0) {
+            myFeedback = FontAwesomeIcons.sadTear;
+            myFeedbackColor = Colors.red;
+            myFeedbackText =
+            "PODRIA MEJORAR BASTANTE";
+          }
+          if (sliderValue >= 1.1 &&
+              sliderValue <= 2.0) {
+            myFeedback = FontAwesomeIcons.smile;
+            myFeedbackColor = Colors.yellow;
+            myFeedbackText = "ES BUENO";
+          }
+          if (sliderValue >= 2.1 &&
+              sliderValue <= 3.0) {
+            myFeedback = FontAwesomeIcons.laugh;
+            myFeedbackColor = Colors.green;
+            myFeedbackText = "ES EXELENTE";
+          }
         });
       }
     });
@@ -182,7 +201,7 @@ class _CalificacionAppPage extends State<CalificacionAppPage> {
                             child: Container(
                               child: Slider(
                                 min: 0,
-                                max: 5,
+                                max: 3,
                                 divisions: 4,
                                 value: sliderValue,
                                 activeColor: Color(0xffe05f2c),
@@ -197,14 +216,14 @@ class _CalificacionAppPage extends State<CalificacionAppPage> {
                                       myFeedbackText =
                                       "PODRIA MEJORAR BASTANTE";
                                     }
-                                    if (sliderValue >= 2.1 &&
-                                        sliderValue <= 3.0) {
+                                    if (sliderValue >= 1.1 &&
+                                        sliderValue <= 2.0) {
                                       myFeedback = FontAwesomeIcons.smile;
                                       myFeedbackColor = Colors.yellow;
                                       myFeedbackText = "ES BUENO";
                                     }
-                                    if (sliderValue >= 3.1 &&
-                                        sliderValue <= 4.0) {
+                                    if (sliderValue >= 2.1 &&
+                                        sliderValue <= 3.0) {
                                       myFeedback = FontAwesomeIcons.laugh;
                                       myFeedbackColor = Colors.green;
                                       myFeedbackText = "ES EXELENTE";

@@ -143,62 +143,64 @@ class _MisTurnosPage extends State<MisTurnosPage> {
   Widget turnoRegular(var documento) {
     return Card(
       color: Colors.blue,
-      child: InkWell(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Turno Regular",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontFamily: 'Questrial',
-                        fontWeight: FontWeight.w500,
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: AutoSizeText(
-                      "Turno: ${documento["turno"]}",
-                      style: TextStyle(
-                          fontSize: 40.0,
-                          fontFamily: 'Questrial',
-                          fontWeight: FontWeight.w500),
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    color: Colors.blue[900],
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 20),
+                Text("Turno Regular",
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                      fontFamily: 'Questrial',
+                      fontWeight: FontWeight.w500,
+                    )),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: AutoSizeText(
+                    "Turno: ${documento["turno"]}",
+                    style: TextStyle(
+                        fontSize: 40.0,
+                        fontFamily: 'Questrial',
+                        fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          Container(
+            color: Colors.blue[900],
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
                       child: Text(
                         "Nombre: ${StringUtils.capitalize(documento["nombre"])} ${StringUtils.capitalize(documento["apellido"])}",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
-                  ),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red,),
+                      onPressed: _showDialog,
+                    )
+                  ],
                 )
-              ],
-            )
-          ],
-        ),
-        onTap: _showDialog,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -206,63 +208,64 @@ class _MisTurnosPage extends State<MisTurnosPage> {
   Widget turnoReservado(var documento) {
     return Card(
       color: Colors.orange,
-      child: InkWell(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Turno Reservado",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontFamily: 'Questrial',
-                        fontWeight: FontWeight.w500,
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: Text(
-                      "Fecha: ${timestampToDate(documento["fecha_atencion"])} \n Hora: ${documento["hora_atencion"]}",
-                      style: TextStyle(
-                        fontSize: 40.0,
-                        fontFamily: 'Questrial',
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    color: Colors.orange[900],
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 20),
+                Text("Turno Reservado",
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                      fontFamily: 'Questrial',
+                      fontWeight: FontWeight.w500,
+                    )),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Text(
+                    "Fecha: ${timestampToDate(documento["fecha_atencion"])} \n Hora: ${documento["hora_atencion"]}",
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      fontFamily: 'Questrial',
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Colors.orange[900],
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
                       child: Text(
                         "Nombre: ${StringUtils.capitalize(documento["nombre"])} ${StringUtils.capitalize(documento["apellido"])}",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
-                  ),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.white  ,),
+                      onPressed: _showDialog,
+                    )
+                  ],
                 )
-              ],
-            )
-          ],
-        ),
-        onTap: _showDialog,
+            ),
+          ),
+        ],
       ),
     );
   }
