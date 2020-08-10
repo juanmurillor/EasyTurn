@@ -33,7 +33,7 @@ class _MenuProfesoresPage extends State<MenuProfesoresPage> {
                 stream: Firestore.instance
                     .collection("usuarios")
                     .where("programa", isEqualTo: widget.documentSnapshot.reference)
-                .where("docente", isEqualTo: true)
+                .where("tipoUsuario", isEqualTo: "profesor")
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> querySnapshot) {

@@ -74,7 +74,7 @@ class _ListaTurnosPage extends State<ListaTurnosPage> {
       key: _scaffoldState,
       appBar: AppBar(
         title: Text(
-          widget.caja.data["docente"] == true
+          widget.caja.data["tipoUsuario"] == "profesor"
               ? "Turnos Profesor"
               : "Turnos " + StringUtils.capitalize(widget.caja.data["nombre"]),
           style: new TextStyle(fontFamily: 'FugazOne', fontSize: 23),

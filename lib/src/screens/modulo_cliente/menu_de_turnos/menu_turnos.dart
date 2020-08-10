@@ -56,8 +56,7 @@ class _MenuTurnosPage extends State<MenuTurnosPage>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Turnos " + 
-            (widget.documentSnapshot.data["docente"] == true ?  "Profesor" :StringUtils.capitalize(widget.documentSnapshot.data["nombre"])
-
+            (widget.documentSnapshot.data["tipoUsuario"] == "profesor" ?  "Profesor" :StringUtils.capitalize(widget.documentSnapshot.data["nombre"])
             ),style: new TextStyle(
           fontFamily: 'FugazOne',
           fontSize: 23
@@ -83,7 +82,7 @@ class _MenuTurnosPage extends State<MenuTurnosPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Pedir un turno" + (widget.documentSnapshot.data["docente"] == true ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
+                        "Pedir un turno" + (widget.documentSnapshot.data["tipoUsuario"] == "profesor" ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -129,7 +128,7 @@ class _MenuTurnosPage extends State<MenuTurnosPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Reservar un turno"  + (widget.documentSnapshot.data["docente"] == true ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
+                        "Reservar un turno"  + (widget.documentSnapshot.data["tipoUsuario"] == "profesor" ? " con ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                        style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -175,7 +174,7 @@ class _MenuTurnosPage extends State<MenuTurnosPage>{
                       width: 250,
                       child: new FlatButton(
                        child: new Text(
-                        "Ver listado de turnos"  + (widget.documentSnapshot.data["docente"] ==true ? " de ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
+                        "Ver listado de turnos"  + (widget.documentSnapshot.data["tipoUsuario"] == "profesor" ? " de ${StringUtils.capitalize(widget.documentSnapshot.data["nombre"])}" :""),
                       style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
