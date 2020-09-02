@@ -20,7 +20,6 @@ class _CambiarContasenaPage extends State<CambiarContasenaPage> {
   void _cambiarContrasena()async{
     if(_formKey.currentState.validate()){
       var user = await FirebaseAuth.instance.currentUser();
-      print("user data ${user.email} ${antigua_contrasena}");
       var credential = EmailAuthProvider.getCredential(email: user.email, password: antigua_contrasena);
       user.reauthenticateWithCredential(credential).then((value){
         user.updatePassword(nueva_contrasena).then((value) {

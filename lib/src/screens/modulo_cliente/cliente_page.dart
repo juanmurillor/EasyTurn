@@ -71,7 +71,6 @@ class _ClientePageState extends State<ClientePage>{
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     _firebaseMessaging.subscribeToTopic(user.uid);
-    print(user.uid);
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         DocumentSnapshot doc = await db.document(message["data"]["caja"]).get();
@@ -122,7 +121,7 @@ class _ClientePageState extends State<ClientePage>{
   void moveToMenuSeccionesPage(){
     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuSeccionesPage()),
+                MaterialPageRoute(builder: (context) => MenuSeccionesPage(prevloaded: false,)),
               );
   }
   void moveToCalificarServicioPage(){
