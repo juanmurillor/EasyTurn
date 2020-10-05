@@ -70,7 +70,9 @@ class _ReservarTurnoPage extends State<ReservarTurnoPage> {
         "reservado":true,
         "nombre": userData.data["nombre"],
         "apellido": userData.data["apellido"],
-        "eliminado" : false
+        "eliminado" : false,
+        "email": userData.data["email"],
+        "telefono": userData.data["telefono"],
       };
       db.collection('turnos').add(data).then((value) {
         _scaffoldState.currentState.showSnackBar(new SnackBar(

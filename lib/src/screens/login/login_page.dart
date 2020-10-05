@@ -1,3 +1,4 @@
+import 'package:easy_turn/src/screens/login/recuperar_contrasena.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth.dart';
@@ -180,6 +181,13 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void moveToRecovery(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RecuperarContasenaPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -312,6 +320,17 @@ class _LoginPageState extends State<LoginPage> {
           ),
           onPressed: moveToRegister,
         ),
+        new FlatButton(
+          child: new Text(
+            '¿Olvido la contraseña?',
+            style: new TextStyle(
+                fontSize: 18.0,
+                color: Colors.blue,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Questrial'),
+          ),
+          onPressed: moveToRecovery,
+        ),
       ];
     } else {
       return [
@@ -337,6 +356,17 @@ class _LoginPageState extends State<LoginPage> {
                  fontFamily: 'Questrial'),
           ),
           onPressed: moveToLogin,
+        ),
+        new FlatButton(
+          child: new Text(
+            '¿Olvido la contraseña?',
+            style: new TextStyle(
+                fontSize: 18.0,
+                color: Colors.blue,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Questrial'),
+          ),
+          onPressed: moveToRecovery,
         ),
       ];
     }

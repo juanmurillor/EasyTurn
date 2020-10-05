@@ -22,6 +22,42 @@ class _PedirTurnoPage extends State<PedirTurnoPage>{
       new GlobalKey<ScaffoldState>();
 
   final db = Firestore.instance;
+  int eta = 0;
+  void initState() {
+    // TODO: implement initState
+    getEta();
+    super.initState();
+  }
+  void getEta() async {
+    DateTime now = DateTime.now(); //DateTime
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime tomorrow = DateTime(now.year, now.month, now.day +1 );
+    FirebaseUser user = await  FirebaseAuth.instance.currentUser();
+    widget.caja.snapshots().listen((snap) {
+      DocumentReference userref = Firestore.instance.collection("usuarios").document(user.uid);
+
+      //obtenemos nuestro turno
+      Firestore.instance
+          .collection('turnos')
+          .where('caja', isEqualTo: widget.caja)
+          .where("fecha_atencion", isGreaterThanOrEqualTo: Timestamp.fromDate(today))
+          .where("fecha_atencion", isLessThan: Timestamp.fromDate(tomorrow))
+          .where("atendido", isEqualTo: false)
+          .where("eliminado", isEqualTo: false)
+          .snapshots().listen((event) {
+        int total = 0;
+        for(int i=0; i < event.documents.length;i++){
+          if(event.documents[i].data["usuario"] == userref){
+            break;
+          }
+          total++;
+        }
+        setState(() {
+          eta = total* snap.data["tiempoEstimado"];
+        });
+      });
+    });
+  }
 
   void crearTurno() async{
     var currentUser = await FirebaseAuth.instance.currentUser();
@@ -44,7 +80,6 @@ class _PedirTurnoPage extends State<PedirTurnoPage>{
           .where("fecha_atencion", isGreaterThanOrEqualTo: Timestamp.fromDate(today))
           .where("reservado" , isEqualTo: false)
           .getDocuments();
-      print(alldocs);
       var data = {
         "caja": widget.caja,
         "usuario": usuario,
@@ -88,6 +123,8 @@ class _PedirTurnoPage extends State<PedirTurnoPage>{
   }
 
   @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldState,
@@ -127,7 +164,7 @@ class _PedirTurnoPage extends State<PedirTurnoPage>{
                       width: 250,
                       child: new FlatButton(
                       child: new Text(
-                        "Pide un turno",
+                        "Pide un turno \Apx: ${eta}min",
                      style: new TextStyle(fontSize: 35.0, 
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
